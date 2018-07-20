@@ -1,39 +1,43 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      enable-resize-watcher
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+    <v-navigation-drawer :mini-variant.sync="mini"
+                         :clipped="clipped"
+                         enable-resize-watcher
+                         fixed
+                         permanent="true"
+                         value="true"
+                         app>
+      <v-list value="true"
+              v-for="(main, m) in main_menu"
+              :key="m">
+        <v-list-group :prepend-icon="main.icon">
+          <v-list-tile slot="activator">
+            <v-list-tile-title v-text="main.title"></v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile sub-group
+                       value="true"
+                       v-for="(sub, s) in sub_menu"
+                       :key="s"
+                       @click="">
+            <v-list-tile-action>
+              <v-icon v-html="sub.icon"></v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title v-text="sub.title"></v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
+
     <v-toolbar app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
+
     <v-content>
       <router-view/>
     </v-content>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -41,27 +45,34 @@
   export default {
     data() {
       return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [{
+        clipped: true,
+        main_menu: [{
           icon: 'list',
-          title: 'Leistungen'
+          title: 'leistungen'
         }, {
           icon: 'people',
-          title: 'Zahnaerzte'
+          title: 'zahnärzte'
         }, {
           icon: 'create',
-          title: 'Rechnungen'
+          title: 'rechnungen'
         }, {
           icon: 'timeline',
-          title: 'Auswertungen'
+          title: 'auswertungen'
         }, {
           icon: 'language',
-          title: 'Sonstiges'
+          title: 'sonstiges'
         }],
-        miniVariant: false,
-        title: 'Dentoice'
+        sub_menu: [{
+          icon: 'add',
+          title: 'anlegen'
+        }, {
+          icon: 'update',
+          title: 'ändern'
+        }, {
+          icon: 'delete',
+          title: 'löschen'
+        }],
+        title: 'dentoice'
       }
     },
     name: 'App'

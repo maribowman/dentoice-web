@@ -3,18 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import {
-  Vuetify,
-  VApp,
-  VNavigationDrawer,
-  VFooter,
-  VList,
-  VBtn,
-  VIcon,
-  VGrid,
-  VToolbar,
-  transitions
-} from 'vuetify'
+import {transitions, VApp, VBtn, VFooter, VGrid, VIcon, VList, VNavigationDrawer, VToolbar, Vuetify} from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
@@ -29,7 +18,7 @@ Vue.use(Vuetify, {
     VToolbar,
     transitions
   }
-})
+});
 
 Vue.config.productionTip = false
 
@@ -37,6 +26,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
-})
+});
