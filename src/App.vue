@@ -1,38 +1,49 @@
 <template>
   <v-app>
-    <v-navigation-drawer :mini-variant.sync="mini"
-                         :clipped="clipped"
-                         enable-resize-watcher
-                         fixed
-                         permanent="true"
-                         value="true"
+    <v-navigation-drawer v-model="drawer"
+                         :mini-variant.sync="mini"
+                         clipped
+                         stateless
                          app>
       <v-list value="true"
-              v-for="(main, m) in main_menu"
-              :key="m">
+              v-for="main in main_menu"
+              :key="main.title">
         <v-list-group :prepend-icon="main.icon">
           <v-list-tile slot="activator">
-            <v-list-tile-title v-text="main.title"></v-list-tile-title>
+            <!--<v-list-tile-action @click="">-->
+            <!--</v-list-tile-action>-->
+            <v-list-tile-content>
+              <v-list-tile-title>{{ main.title }}</v-list-tile-title>
+            </v-list-tile-content>
           </v-list-tile>
           <v-list-tile sub-group
-                       value="true"
-                       v-for="(sub, s) in sub_menu"
-                       :key="s"
+                       v-for="sub in sub_menu"
+                       :key="sub.title"
                        @click="">
             <v-list-tile-action>
-              <v-icon v-html="sub.icon"></v-icon>
+              <v-icon>{{ sub.icon }}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title v-text="sub.title"></v-list-tile-title>
+              <v-list-tile-title>{{ sub.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar app :clipped-left="clipped">
-      <v-toolbar-side-icon></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-toolbar clipped-left
+               flat
+               dark
+               class="transparent"
+               app>
+      <v-list>
+        <v-list-tile @click="mini = !mini">
+          <v-list-tile>
+            <v-icon>flash_on</v-icon>
+          </v-list-tile>
+          <v-list-tile-title>DENTOICE</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
     </v-toolbar>
 
     <v-content>
@@ -45,7 +56,8 @@
   export default {
     data() {
       return {
-        clipped: true,
+        drawer: true,
+        mini: false,
         main_menu: [{
           icon: 'list',
           title: 'leistungen'
