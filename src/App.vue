@@ -13,7 +13,8 @@
             <!--<v-list-tile-action @click="">-->
             <!--</v-list-tile-action>-->
             <v-list-tile-content>
-              <v-list-tile-title>{{ main.title }}</v-list-tile-title>
+              <!--<router-link to="{ name: 'main.title'}">{{ main.title }}</router-link>-->
+              <v-list-tile-title @click="navigate(Hello)">{{ main.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile sub-group
@@ -53,40 +54,45 @@
 </template>
 
 <script>
+  import router from './router'
+
   export default {
-    data() {
-      return {
-        drawer: true,
-        mini: false,
-        main_menu: [{
-          icon: 'list',
-          title: 'leistungen'
-        }, {
-          icon: 'people',
-          title: 'zahnärzte'
-        }, {
-          icon: 'create',
-          title: 'rechnungen'
-        }, {
-          icon: 'timeline',
-          title: 'auswertungen'
-        }, {
-          icon: 'language',
-          title: 'sonstiges'
-        }],
-        sub_menu: [{
-          icon: 'add',
-          title: 'anlegen'
-        }, {
-          icon: 'update',
-          title: 'ändern'
-        }, {
-          icon: 'delete',
-          title: 'löschen'
-        }],
-        title: 'dentoice'
+    data: () => ({
+      drawer: true,
+      mini: false,
+      main_menu: [{
+        icon: 'list',
+        title: 'leistungen'
+      }, {
+        icon: 'people',
+        title: 'zahnärzte'
+      }, {
+        icon: 'create',
+        title: 'rechnungen'
+      }, {
+        icon: 'timeline',
+        title: 'auswertungen'
+      }, {
+        icon: 'language',
+        title: 'sonstiges'
+      }],
+      sub_menu: [{
+        icon: 'add',
+        title: 'anlegen'
+      }, {
+        icon: 'update',
+        title: 'ändern'
+      }, {
+        icon: 'delete',
+        title: 'löschen'
+      }],
+      title: 'dentoice'
+    }),
+    name: 'App',
+    methods: {
+      navigate() {
+        router.go(Hello);
       }
-    },
-    name: 'App'
+    }
   }
 </script>

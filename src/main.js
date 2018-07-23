@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import {transitions, VApp, VBtn, VFooter, VGrid, VIcon, VList, VNavigationDrawer, VToolbar, Vuetify} from 'vuetify'
+import {transitions, VApp, VBtn, VFooter, VGrid, VIcon, VList, VNavigationDrawer, VSelect, VTextField, VToolbar, Vuetify} from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
@@ -15,6 +15,8 @@ Vue.use(Vuetify, {
     VBtn,
     VIcon,
     VGrid,
+    VSelect,
+    VTextField,
     VToolbar,
     transitions
   }
