@@ -4,6 +4,7 @@ import Services from '@/components/Services'
 import CreateService from '@/components/CreateService'
 import Dentists from '@/components/Dentists'
 import CreateDentist from '@/components/CreateDentist'
+import Invoices from '@/components/Invoices'
 import CreateInvoice from '@/components/CreateInvoice'
 import Analytics from '@/components/Analytics'
 import Misc from '@/components/Misc'
@@ -39,7 +40,7 @@ export default new Router({
       component: Invoices
     },
     {
-      path: '/Invoices/create',
+      path: '/invoices/create',
       name: 'CreateInvoice',
       component: CreateInvoice
     },
@@ -50,7 +51,7 @@ export default new Router({
     },
     {
       path: '/misc',
-      name: 'misc',
+      name: 'Misc',
       component: Misc
     },
     {
