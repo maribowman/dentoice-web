@@ -46,15 +46,22 @@
                     clearable
                     required
       ></v-text-field>
-      <v-btn>anlegen</v-btn>
+      <v-btn @click="navigate('Dentists')">anlegen</v-btn>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+  import router from '../router'
+
   export default {
     data: () => ({
       title: ['herr', 'frau']
-    })
+    }),
+    methods: {
+      navigate(page) {
+        router.push({name: page});
+      }
+    }
   }
 </script>

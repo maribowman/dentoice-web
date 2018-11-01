@@ -13,14 +13,14 @@
             <!--<v-list-tile-action @click="">-->
             <!--</v-list-tile-action>-->
             <v-list-tile-content>
-              <!--<router-link to="{ name: 'main.title'}">{{ main.title }}</router-link>-->
-              <v-list-tile-title @click="navigate(Hello)">{{ main.title }}</v-list-tile-title>
+              <!--<router-link :to="{ name: 'Dentists'}">{{ main.title }}</router-link>-->
+              <v-list-tile-title @click="navigate('Dentists')">{{ main.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile sub-group
                        v-for="sub in sub_menu"
                        :key="sub.title"
-                       @click="">
+                       @click="navigate('CreateForm')">
             <v-list-tile-action>
               <v-icon>{{ sub.icon }}</v-icon>
             </v-list-tile-action>
@@ -60,6 +60,7 @@
     data: () => ({
       drawer: true,
       mini: false,
+      routes: [{dentists: 'Dentists'}, {create: 'CreateForm'}],
       main_menu: [{
         icon: 'list',
         title: 'leistungen'
@@ -90,8 +91,8 @@
     }),
     name: 'App',
     methods: {
-      navigate() {
-        router.go(Hello);
+      navigate(page) {
+        router.push({name: page});
       }
     }
   }
