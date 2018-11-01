@@ -13,7 +13,6 @@
                       :prepend-icon="item.icon"
                       no-action
         >
-
           <v-list-tile slot="activator">
             <v-list-tile-content>
               <v-list-tile-title @click="navigate('Dentists')">{{ item.title }}</v-list-tile-title>
@@ -69,7 +68,7 @@
       mainMenu: [{
         title: 'leistungen',
         icon: 'list',
-        route: 'leistungen'
+        route: 'Services'
       }, {
         title: 'zahnärzte',
         icon: 'people',
@@ -77,15 +76,15 @@
       }, {
         title: 'rechnungen',
         icon: 'create',
-        route: ''
+        route: 'Invoices'
       }, {
         title: 'auswertungen',
         icon: 'timeline',
-        route: ''
+        route: 'Analytics'
       }, {
         title: 'sonstiges',
         icon: 'language',
-        route: ''
+        route: 'Misc'
       }],
       sub_menu: [{
         title: 'anlegen',
