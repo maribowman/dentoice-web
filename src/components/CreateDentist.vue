@@ -61,12 +61,12 @@
       title: ['herr', 'frau']
     }),
     methods: {
-      routeToDentists() {
-        router.push({name: "Dentists"});
-      },
       create() {
         // make post call to backend
-        routeToDentists();
+        this.routeToDentists();
+      },
+      routeToDentists() {
+        router.push({name: "Dentists"});
       }
     }
   }

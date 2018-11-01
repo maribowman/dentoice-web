@@ -11,11 +11,11 @@
                       v-model="item.active"
                       :key="item.title"
                       :prepend-icon="item.icon"
-                      no-action
+                      @click="navigate(item.route)"
         >
           <v-list-tile slot="activator">
             <v-list-tile-content>
-              <v-list-tile-title @click="navigate('Dentists')">{{ item.title }}</v-list-tile-title>
+              <v-list-tile-title>{{item.title}}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
@@ -25,10 +25,10 @@
                        @click="navigate('CreateDentist')"
           >
             <v-list-tile-action>
-              <v-icon>{{ sub.icon }}</v-icon>
+              <v-icon>{{sub.icon}}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{ sub.title }}</v-list-tile-title>
+              <v-list-tile-title>{{sub.title}}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
@@ -62,7 +62,6 @@
   export default {
     data: () => ({
       name: 'App',
-      title: 'dentoice',
       drawer: true,
       mini: false,
       mainMenu: [{
@@ -75,7 +74,7 @@
         route: 'Dentists'
       }, {
         title: 'rechnungen',
-        icon: 'create',
+        icon: 'local_atm',
         route: 'Invoices'
       }, {
         title: 'auswertungen',
@@ -89,13 +88,8 @@
       sub_menu: [{
         title: 'anlegen',
         icon: 'add'
-      }, {
-        title: 'ändern',
-        icon: 'update'
-      }, {
-        title: 'löschen',
-        icon: 'delete'
-      }]
+      }
+      ]
     }),
     methods: {
       navigate(page) {

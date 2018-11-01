@@ -1,67 +1,63 @@
 <template>
-  <v-form>
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 sm6>
-          <v-text-field name="first_name"
-                        placeholder="vorname"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="last_name"
-                        placeholder="nachname"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="street"
-                        placeholder="strasse"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="zip"
-                        placeholder="postleitzahl"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="city"
-                        placeholder="ort"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="phone"
-                        placeholder="telefon"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="fax"
-                        placeholder="fax"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm6>
-          <v-text-field name="email"
-                        placeholder="email"
-                        readonly="true"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-btn @click="navigate()">hello</v-btn>
-      </v-layout>
-    </v-container>
-  </v-form>
+  <v-container fluid grid-list-md>
+    <v-data-iterator
+      :items=samples
+      :rows-per-page-items="rowsPerPageItems"
+      :pagination.sync="pagination"
+      content-tag="v-layout"
+      row
+      wrap
+    >
+      <v-flex
+        slot="item"
+        slot-scope="props"
+        xs12
+        sm6
+        md4
+        lg3
+      >
+        <v-card>
+          <v-card-title>
+            <h4>{{props.item.name}}</h4>
+            <v-spacer/>
+            <v-card-actions>
+              <v-btn icon
+                     @click="alter(item)"
+              >
+                <v-icon>create</v-icon>
+              </v-btn>
+              <v-btn icon
+                     @click="alter(item)"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card-title>
+
+          <v-divider/>
+          <v-list>
+            <v-list-tile>
+              <v-list-tile-content>{{ props.item.street}}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.city }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>phone:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.phone}}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>fax:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.fax}}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>email:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.email}}</v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+
+        </v-card>
+      </v-flex>
+    </v-data-iterator>
+  </v-container>
 </template>
 
 <script>
@@ -69,10 +65,75 @@
 
   export default {
     name: 'Dentists',
+    rowsPerPageItems: [4, 8, 12],
+    pagination: {
+      rowsPerPage: 2
+    },
     methods: {
-      navigate() {
-        router.push({name: "NotFound"});
+      navigate(page) {
+        router.push({name: page});
+      },
+      alter(item) {
+        // pass over item
+        router.push({name: "CreateDentist"});
       }
-    }
+    },
+    data: () => ({
+      samples: [
+        {
+          id: 1,
+          name: "mat fraser",
+          street: "rich froning way 1",
+          city: "123456 cookville",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "mat.fraser@test.com",
+        },
+        {
+          id: 2,
+          name: "katrin davidsdottir",
+          street: "sled dog ave 1",
+          city: "123456 iceland",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "katrin.davidsdottir@test.com"
+        },
+        {
+          id: 3,
+          name: "kara webb",
+          street: "crossfit kova street",
+          city: "123456 brisbane",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "kara.webb@test.com"
+        }, {
+          id: 1,
+          name: "mat fraser",
+          street: "rich froning way 1",
+          city: "123456 cookville",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "mat.fraser@test.com",
+        },
+        {
+          id: 2,
+          name: "katrin davidsdottir",
+          street: "sled dog ave 1",
+          city: "123456 iceland",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "katrin.davidsdottir@test.com"
+        },
+        {
+          id: 3,
+          name: "kara webb",
+          street: "crossfit kova street",
+          city: "123456 brisbane",
+          phone: "+123456789",
+          fax: "+123456789",
+          email: "kara.webb@test.com"
+        }
+      ]
+    })
   }
 </script>
