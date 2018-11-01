@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import CreateForm from '@/components/CreateForm'
+import CreateDentist from '@/components/CreateDentist'
 import Dentists from '@/components/Dentists'
-import Hello from '@/components/Hello'
+import NotFound from '@/components/NotFound'
 
 Vue.use(Router);
 
@@ -15,13 +15,13 @@ export default new Router({
     },
     {
       path: '/dentists/create',
-      name: 'CreateForm',
-      component: CreateForm
+      name: 'CreateDentist',
+      component: CreateDentist
     },
     {
-      path: '/hello',
-      name: 'Hello',
-      component: Hello
+      path: '*',
+      name: 'NotFound',
+      component: NotFound
     }
   ]
 })

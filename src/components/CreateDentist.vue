@@ -46,8 +46,9 @@
                     clearable
                     required
       ></v-text-field>
-      <v-btn @click="navigate('Dentists')">anlegen</v-btn>
     </v-layout>
+    <v-btn @click="create()">anlegen</v-btn>
+    <v-btn @click="routeToDentists()">abbrechen</v-btn>
   </v-container>
 </template>
 
@@ -55,12 +56,17 @@
   import router from '../router'
 
   export default {
+    name: 'CreateDentists',
     data: () => ({
       title: ['herr', 'frau']
     }),
     methods: {
-      navigate(page) {
-        router.push({name: page});
+      routeToDentists() {
+        router.push({name: "Dentists"});
+      },
+      create() {
+        // make post call to backend
+        routeToDentists();
       }
     }
   }

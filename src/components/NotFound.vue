@@ -4,14 +4,9 @@
       <v-layout column align-center>
         <!--<img src="@/assets/logo.png" alt="Vuetify.js" class="mb-5">-->
         <blockquote>
-          &#8220;If you cant dodge it, ram it!.&#8221;
-          <footer>
-            <small>
-              <em>&mdash;Mari</em>
-            </small>
-          </footer>
-          <v-btn @click="navigate()">dentists</v-btn>
+          &#8220;PAGE NOT FOUND!&#8221;
         </blockquote>
+        <v-btn @click="navigate()">back</v-btn>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
@@ -21,10 +16,10 @@
   import router from '../router'
 
   export default {
-    name: 'Hello',
+    name: 'NotFound',
     methods: {
       navigate() {
-        router.push({name: "Dentists"});
+        router.go(-1);
       }
     }
   }

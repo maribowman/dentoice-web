@@ -4,23 +4,27 @@
                          :mini-variant.sync="mini"
                          clipped
                          stateless
-                         app>
-      <v-list value="true"
-              v-for="main in main_menu"
-              :key="main.title">
-        <v-list-group :prepend-icon="main.icon">
+                         app
+    >
+      <v-list>
+        <v-list-group v-for="item in mainMenu"
+                      v-model="item.active"
+                      :key="item.title"
+                      :prepend-icon="item.icon"
+                      no-action
+        >
+
           <v-list-tile slot="activator">
-            <!--<v-list-tile-action @click="">-->
-            <!--</v-list-tile-action>-->
             <v-list-tile-content>
-              <!--<router-link :to="{ name: 'Dentists'}">{{ main.title }}</router-link>-->
-              <v-list-tile-title @click="navigate('Dentists')">{{ main.title }}</v-list-tile-title>
+              <v-list-tile-title @click="navigate('Dentists')">{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
           <v-list-tile sub-group
                        v-for="sub in sub_menu"
                        :key="sub.title"
-                       @click="navigate('CreateForm')">
+                       @click="navigate('CreateDentist')"
+          >
             <v-list-tile-action>
               <v-icon>{{ sub.icon }}</v-icon>
             </v-list-tile-action>
@@ -58,38 +62,42 @@
 
   export default {
     data: () => ({
+      name: 'App',
+      title: 'dentoice',
       drawer: true,
       mini: false,
-      routes: [{dentists: 'Dentists'}, {create: 'CreateForm'}],
-      main_menu: [{
+      mainMenu: [{
+        title: 'leistungen',
         icon: 'list',
-        title: 'leistungen'
+        route: 'leistungen'
       }, {
+        title: 'zahnärzte',
         icon: 'people',
-        title: 'zahnärzte'
+        route: 'Dentists'
       }, {
+        title: 'rechnungen',
         icon: 'create',
-        title: 'rechnungen'
+        route: ''
       }, {
+        title: 'auswertungen',
         icon: 'timeline',
-        title: 'auswertungen'
+        route: ''
       }, {
+        title: 'sonstiges',
         icon: 'language',
-        title: 'sonstiges'
+        route: ''
       }],
       sub_menu: [{
-        icon: 'add',
-        title: 'anlegen'
+        title: 'anlegen',
+        icon: 'add'
       }, {
-        icon: 'update',
-        title: 'ändern'
+        title: 'ändern',
+        icon: 'update'
       }, {
-        icon: 'delete',
-        title: 'löschen'
-      }],
-      title: 'dentoice'
+        title: 'löschen',
+        icon: 'delete'
+      }]
     }),
-    name: 'App',
     methods: {
       navigate(page) {
         router.push({name: page});

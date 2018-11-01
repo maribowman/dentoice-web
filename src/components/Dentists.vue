@@ -71,7 +71,7 @@
     name: 'Dentists',
     methods: {
       navigate() {
-        router.push({name: "Hello"});
+        router.push({name: "NotFound"});
       }
     }
   }
