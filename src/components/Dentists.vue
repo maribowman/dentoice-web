@@ -1,9 +1,9 @@
 <template>
   <v-container fluid grid-list-md>
     <v-data-iterator
-      :items=samples
-      :rows-per-page-items=[10]
+      :items="samples"
       content-tag="v-layout"
+      hide-actions
       row
       wrap
     >
@@ -49,6 +49,30 @@
               <v-icon>delete</v-icon>
             </v-btn>
           </v-card-actions>
+          <!--<v-speed-dial
+            :direction="left"
+            bottom
+            right
+            open-on-hover
+            :transition="slide-y"
+          >
+            <v-btn slot="activator"
+                   icon
+            >
+              <v-icon>account_circle</v-icon>
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-btn icon
+                   @click="alter(item)"
+            >
+              <v-icon>create</v-icon>
+            </v-btn>
+            <v-btn icon
+                   @click="alter(item)"
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </v-speed-dial>-->
         </v-card>
       </v-flex>
     </v-data-iterator>
