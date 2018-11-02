@@ -1,57 +1,39 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer"
-                         :mini-variant.sync="mini"
+    <v-navigation-drawer permanent
+                         mini-variant
                          clipped
                          stateless
+                         hide-overlay
+                         dark
                          app
     >
-      <v-list>
-        <v-list-group v-for="item in mainMenu"
-                      v-model="item.active"
-                      :key="item.title"
-                      :prepend-icon="item.icon"
-                      @click="navigate(item.route)"
-        >
-          <v-list-tile slot="activator">
-            <v-list-tile-content>
-              <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile sub-group
-                       v-for="sub in sub_menu"
-                       :key="sub.title"
-                       @click="navigate('CreateDentist')"
-          >
-            <v-list-tile-action>
-              <v-icon>{{sub.icon}}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{sub.title}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list-group>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-toolbar clipped-left
-               flat
-               dark
-               class="transparent"
-               app>
-      <v-list>
-        <v-list-tile @click="mini = !mini">
+      <v-toolbar clipped-left
+                 prominent
+      >
+        <v-list>
           <v-list-tile>
-            <v-icon>flash_on</v-icon>
+            <v-list-tile-avatar>
+              <img src="@/assets/dent.png">
+            </v-list-tile-avatar>
           </v-list-tile>
-          <v-list-tile-title>DENTOICE</v-list-tile-title>
+        </v-list>
+      </v-toolbar>
+      <v-list two-line>
+        <v-list-tile v-for="item in menu"
+                     v-model="item.active"
+                     :key="item.title"
+                     :prepend-icon="item.icon"
+                     @click="navigate(item.route)"
+        >
+          <v-list-tile-avatar>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-tile-avatar>
         </v-list-tile>
       </v-list>
-    </v-toolbar>
-
+    </v-navigation-drawer>
     <v-content>
-      <router-view/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
@@ -62,34 +44,27 @@
   export default {
     data: () => ({
       name: 'App',
-      drawer: true,
-      mini: false,
-      mainMenu: [{
+      menu: [{
         title: 'leistungen',
-        icon: 'list',
+        icon: 'library_books',
         route: 'Services'
       }, {
         title: 'zahnärzte',
-        icon: 'people',
+        icon: 'group',
         route: 'Dentists'
       }, {
         title: 'rechnungen',
-        icon: 'local_atm',
+        icon: 'attach_money',
         route: 'Invoices'
       }, {
         title: 'auswertungen',
-        icon: 'timeline',
+        icon: 'bar_chart',
         route: 'Analytics'
       }, {
         title: 'sonstiges',
-        icon: 'language',
+        icon: 'all_inclusive',
         route: 'Misc'
-      }],
-      sub_menu: [{
-        title: 'anlegen',
-        icon: 'add'
-      }
-      ]
+      }]
     }),
     methods: {
       navigate(page) {
