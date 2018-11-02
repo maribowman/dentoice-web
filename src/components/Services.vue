@@ -1,18 +1,24 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="filteredItems"
-    :rows-per-page-items="[10]"
-    :filter="filterBy"
-    class="elevation-1"
-  >
-    <template slot="items" slot-scope="props">
-      <td>{{props.item.number}}</td>
-      <td>{{props.item.name }}</td>
-      <td>{{props.item.price}}</td>
-      <td>{{props.item.type}}</td>
-    </template>
-  </v-data-table>
+  <v-container fluid grid-list-md>
+    <v-text-field v-model="search"
+                  append-icon="search"
+                  label="suche"
+                  solo
+    ></v-text-field>
+    <v-data-table
+      :headers="headers"
+      :items="filteredItems"
+      :search="search"
+      :rows-per-page-items="[10]"
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{props.item.number}}</td>
+        <td>{{props.item.name }}</td>
+        <td>{{props.item.price}}</td>
+        <td>{{props.item.type}}</td>
+      </template>
+    </v-data-table>
+  </v-container>
 </template>
 
 <script>
@@ -55,6 +61,7 @@
           value: 'price'
         }
       ],
+      search: '',
       filterBy: "service",
       samples: [
         {
