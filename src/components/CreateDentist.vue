@@ -22,28 +22,28 @@
                   required
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="vorname" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="nachname" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="strasse" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="nummer" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="postleitzahl" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="ort" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="telefon"></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6>
                 <v-text-field label="fax"></v-text-field>
               </v-flex>
               <v-flex xs12>
@@ -54,7 +54,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat @click="create()">abbrechen</v-btn>
+          <v-btn flat @click="back()">abbrechen</v-btn>
           <v-btn color="green" flat @click="create()">speichern</v-btn>
         </v-card-actions>
       </v-card>
@@ -67,16 +67,13 @@
 
   export default {
     name: 'CreateDentists',
-    data: () => ({
-      title: ['herr', 'frau']
-    }),
     methods: {
       create() {
         // make post call to backend
-        this.routeToDentists();
-      },
-      routeToDentists() {
         router.push({name: "Dentists"});
+      },
+      back() {
+        router.go(-1);
       }
     }
   }

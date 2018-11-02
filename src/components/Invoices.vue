@@ -24,13 +24,13 @@
       <template slot="expand" slot-scope="props">
         <v-card flat>
           <v-card-action>
-            <v-btn flat color="green">
+            <v-btn flat color="green" @click="create()">
               <v-icon>picture_as_pdf</v-icon>
             </v-btn>
-            <v-btn flat color="blue">
+            <v-btn flat color="blue" @click="edit()">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn flat color="red">
+            <v-btn flat color="red" @click="remove()">
               <v-icon>delete</v-icon>
             </v-btn>
           </v-card-action>
@@ -45,6 +45,7 @@
              fixed
              bottom
              right
+             @click="create()"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -58,12 +59,15 @@
   export default {
     name: 'Dentists',
     methods: {
-      navigate(page) {
-        router.push({name: page});
+      create() {
+        router.push({name: "CreateInvoice"});
       },
-      alter(item) {
+      edit(item) {
         // pass over item
-        router.push({name: "CreateDentist"});
+        router.push({name: "CreateInvoice"});
+      },
+      remove() {
+        // delete object
       }
     },
     data: () => ({
