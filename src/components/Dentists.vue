@@ -51,11 +51,12 @@
     <v-flex>
       <v-btn color="green"
              big
+             fab
              dark
              fixed
              bottom
              right
-             fab
+             @click="create()"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -69,8 +70,8 @@
   export default {
     name: 'Dentists',
     methods: {
-      navigate(page) {
-        router.push({name: page});
+      create() {
+        router.push({name: "CreateDentist"});
       },
       alter(item) {
         // pass over item

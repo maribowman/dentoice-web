@@ -35,11 +35,11 @@
     <v-flex>
       <v-btn color="green"
              big
+             fab
              dark
              fixed
              bottom
              right
-             fab
       >
         <v-icon>add</v-icon>
       </v-btn>

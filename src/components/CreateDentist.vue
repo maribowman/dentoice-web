@@ -1,54 +1,64 @@
 <template>
-  <v-container fluid>
-    <v-layout column
-              align-center>
-      <v-select v-model="select"
-                :items="title"
-                label="titel"
-                required
-      ></v-select>
-      <v-text-field name="first_name"
-                    label="vorname"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="last_name"
-                    label="nachname"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="street"
-                    label="strasse"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="zip"
-                    label="postleitzahl"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="city"
-                    label="ort"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="phone"
-                    label="telefon"
-                    clearable
-                    required
-      ></v-text-field>
-      <v-text-field name="fax"
-                    label="fax"
-                    clearable
-      ></v-text-field>
-      <v-text-field name="email"
-                    label="email"
-                    clearable
-                    required
-      ></v-text-field>
+  <v-container fluid grid-list-md>
+    <v-layout row justify-center>
+      <v-card>
+        <v-card-title>
+          <span class="headline">ZAHNARZT ANLEGEN</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 sm6>
+                <v-select
+                  :items="['Herr','Frau']"
+                  label="anrede"
+                  required
+                ></v-select>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-select
+                  :items="['Dr.','Prof. Dr.']"
+                  label="titel"
+                  required
+                ></v-select>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="vorname" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="nachname" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="strasse" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="nummer" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="postleitzahl" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="ort" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="telefon"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="fax"></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field label="email" required></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="create()">abbrechen</v-btn>
+          <v-btn color="green" flat @click="create()">speichern</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-layout>
-    <v-btn @click="create()">anlegen</v-btn>
-    <v-btn @click="routeToDentists()">abbrechen</v-btn>
   </v-container>
 </template>
 
