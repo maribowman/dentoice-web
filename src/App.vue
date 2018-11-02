@@ -8,9 +8,7 @@
                          dark
                          app
     >
-      <v-toolbar clipped-left
-                 prominent
-      >
+      <v-toolbar clipped-left prominent>
         <v-list>
           <v-list-tile>
             <v-list-tile-avatar>

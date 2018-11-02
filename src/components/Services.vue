@@ -5,19 +5,45 @@
                   label="suche"
                   solo
     ></v-text-field>
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      :search="search"
-      :rows-per-page-items="[10]"
+    <v-data-table :headers="headers"
+                  :items="filteredItems"
+                  :search="search"
+                  :rows-per-page-items="[10]"
+                  item-key="number"
     >
       <template slot="items" slot-scope="props">
-        <td>{{props.item.number}}</td>
-        <td>{{props.item.name }}</td>
-        <td>{{props.item.price}}</td>
-        <td>{{props.item.type}}</td>
+        <tr @click="props.expanded = !props.expanded">
+          <td>{{props.item.number}}</td>
+          <td>{{props.item.name }}</td>
+          <td>{{props.item.price}}</td>
+          <td>{{props.item.type}}</td>
+        </tr>
+      </template>
+      <template slot="expand" slot-scope="props">
+        <v-card flat>
+          <v-card-action>
+            <v-btn flat color="blue">
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <v-btn flat color="red">
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </v-card-action>
+        </v-card>
       </template>
     </v-data-table>
+    <v-flex>
+      <v-btn color="green"
+             big
+             dark
+             fixed
+             bottom
+             right
+             fab
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+    </v-flex>
   </v-container>
 </template>
 
