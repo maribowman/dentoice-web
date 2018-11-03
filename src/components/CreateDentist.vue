@@ -3,7 +3,7 @@
     <v-layout row justify-center>
       <v-card>
         <v-card-title>
-          <span class="headline">ZAHNARZT ANLEGEN</span>
+          <span class="headline">NEUER ZAHNARZT</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>

@@ -5,12 +5,15 @@ import App from './App'
 import router from './router'
 import {
   transitions,
+  VAlert,
   VApp,
   VBtn,
   VCard,
+  VCheckbox,
   VDataIterator,
   VDatePicker,
   VDataTable,
+  VDialog,
   VDivider,
   VFooter,
   VGrid,
@@ -30,12 +33,15 @@ import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
   components: {
+    VAlert,
     VApp,
     VBtn,
     VCard,
+    VCheckbox,
     VDataIterator,
     VDataTable,
     VDatePicker,
+    VDialog,
     VDivider,
     VFooter,
     VGrid,

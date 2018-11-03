@@ -50,7 +50,6 @@
     </v-layout>
     <v-flex>
       <v-btn color="green"
-             big
              fab
              dark
              fixed

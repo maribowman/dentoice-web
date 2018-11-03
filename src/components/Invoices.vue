@@ -24,13 +24,13 @@
       <template slot="expand" slot-scope="props">
         <v-card flat>
           <v-card-action>
-            <v-btn flat color="green" @click="create()">
+            <v-btn flat color="green" @click="createPdf(props.item)">
               <v-icon>picture_as_pdf</v-icon>
             </v-btn>
-            <v-btn flat color="blue" @click="edit()">
+            <v-btn flat color="blue" @click="edit(props.item)">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn flat color="red" @click="remove()">
+            <v-btn flat color="red" @click="remove(props.item)">
               <v-icon>delete</v-icon>
             </v-btn>
           </v-card-action>
@@ -39,7 +39,6 @@
     </v-data-table>
     <v-flex>
       <v-btn color="green"
-             big
              fab
              dark
              fixed
@@ -62,11 +61,14 @@
       create() {
         router.push({name: "CreateInvoice"});
       },
+      createPdf(item) {
+        // create pdf
+      },
       edit(item) {
         // pass over item
         router.push({name: "CreateInvoice"});
       },
-      remove() {
+      remove(item) {
         // delete object
       }
     },
