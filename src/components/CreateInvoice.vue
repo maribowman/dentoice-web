@@ -113,7 +113,7 @@
                   :items="materials"
                   item-key="number"
                   hide-actions
-                  class="elevation-1"
+                  no-data-text="noch kein material spezifiziert"
                 >
                   <template slot="items" slot-scope="props">
                     <tr :active="props.selected" @click="props.selected = !props.selected">
@@ -200,7 +200,7 @@
                   :items="efforts"
                   item-key="number"
                   hide-actions
-                  class="elevation-1"
+                  no-data-text="noch keine leistungen spezifiziert"
                 >
                   <template slot="items" slot-scope="props">
                     <tr :active="props.selected"
@@ -353,13 +353,14 @@
             name: "test 1",
             quantity: "1.0",
             price: "65.00",
-            isPrivate: false
-          }, {
+            value: false
+          },
+          {
             number: "23546",
             name: "sample 2",
             quantity: "5.2",
             price: "123.11",
-            isPrivate: true
+            value: true
           }
         ];
         this.efforts = [
@@ -368,13 +369,13 @@
             name: "testing 1",
             quantity: "1.0",
             price: "1.00",
-            isPrivate: false
+            value: true
           }, {
             number: "64",
             name: "samples 123",
             quantity: "54.2",
             price: "145.89",
-            isPrivate: false
+            value: false
           }
         ];
       },
@@ -393,14 +394,12 @@
 
       deleteMaterial(item) {
         const index = this.materials.indexOf(item);
-        alert('item: ' + item.type + ', ' + item.number + ', ' + item.name + ', ' + item.quantity + ', ' + item.price);
-        confirm('material \'' + item.position + ' - ' + item.name + '\' wirklich loeschen?') && this.materials.splice(index, 1);
+        confirm('material \'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.materials.splice(index, 1);
       },
 
       deleteEffort(item) {
         const index = this.efforts.indexOf(item);
-        alert('item: ' + item.type + ', ' + item.number + ', ' + item.name + ', ' + item.quantity + ', ' + item.price);
-        confirm('leistung \'' + item.position + ' - ' + item.name + '\' wirklich loeschen?') && this.efforts.splice(index, 1);
+        confirm('leistung \'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.efforts.splice(index, 1);
       },
 
       close() {
