@@ -47,15 +47,14 @@
                         transition="scale-transition"
                         offset-y
                         full-width
-                        max-width="200px"
+                        min-width="290px"
                 >
-                  <!--<v-text-field slot="activator"-->
-                                <!--v-model="date"-->
-                                <!--prepend-icon="event"-->
-                                <!--readonly-->
-                  <!--&gt;</v-text-field>-->
+                  <v-text-field slot="activator"
+                                v-model="date"
+                                prepend-icon="event"
+                                readonly
+                  ></v-text-field>
                   <v-date-picker v-model="date"
-                                 landscape
                                  @click="datePicker = false"
                                  first-day-of-week="1"
                                  locale="de-de"
