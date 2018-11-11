@@ -42,10 +42,16 @@
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat color="blue">
+                <v-btn flat
+                       color="blue"
+                       @click="edit(props.item)"
+                >
                   <v-icon>edit</v-icon>
                 </v-btn>
-                <v-btn flat color="red">
+                <v-btn flat
+                       color="red"
+                       @click="remove(props.item)"
+                >
                   <v-icon>delete</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -79,41 +85,115 @@
         <v-btn fab
                dark
                small
-               @click="createService()"
+               @click="createEffort()"
         >
           <v-icon>business_center</v-icon>
         </v-btn>
       </v-speed-dial>
     </v-layout>
+
+
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{formTitle}}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout column>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.number" label="position"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.price" label="einzelpreis"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click.native="close()">abbrechen</v-btn>
+          <v-btn color="orange" flat @click.native="save()">hinzufügen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-  import router from '../router'
-
   export default {
-    name: 'Dentists',
+    name: 'Services',
 
 
     methods: {
-      navigate(page) {
-        router.push({name: page});
+      createMaterial() {
+        this.editedIndex = -1;
+        this.editedItem.type = 'material';
+        this.dialog = true;
+      },
+
+      createEffort() {
+        this.editedIndex = -1;
+        this.editedItem.type = 'service';
+        this.dialog = true;
       },
 
       edit(item) {
-        // pass over item
-        router.push({name: "CreateDentist"});
+        this.editedIndex = this.services.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
+      },
+
+      remove(item) {
+        const index = this.services.indexOf(item);
+        // TODO request to BE
+        confirm('\'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.services.splice(index, 1);
+      },
+
+      close() {
+        this.dialog = false;
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1
+        }, 300)
+      },
+
+      save() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.services[this.editedIndex], this.editedItem);
+        } else {
+          this.services.push(this.editedItem);
+        }
+        // TODO request to BE
+        this.close();
       }
     },
 
 
     computed: {
       filteredItems() {
-        return this.samples.filter((i) => {
+        return this.services.filter((i) => {
           return !this.filterBy || (i.type === this.filterBy);
         })
+      },
+
+      formTitle() {
+        var type = this.editedItem.type === 'material' ? "MATERIAL" : "LEISTUNG";
+        var action = this.editedIndex === -1 ? "HINZUFÜGEN" : "BEARBEITEN";
+        return type + ' ' + action;
       }
     },
+
+
+    watch: {
+      dialog(val) {
+        val || this.close()
+      }
+    }
+    ,
 
 
     data: () => ({
@@ -123,7 +203,7 @@
           value: "number"
         },
         {
-          text: "leistungsbezeichnung",
+          text: "bezeichnung",
           value: "name"
         },
         {
@@ -132,16 +212,37 @@
         }
       ],
       search: '',
-      filterBy: 'material',
+      filterBy: '',
+      services: [],
       fab: false,
-      samples: [
-        {
-          id: 1,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
+      dialog: false,
+      editedIndex: -1,
+      editedItem: {
+        id: '',
+        number: '',
+        type: '',
+        name: '',
+        price: ''
+      },
+      defaultItem: {
+        editedItem: {
+          id: '',
+          number: '',
+          type: '',
+          name: '',
+          price: ''
+        }
+      }
+    }),
+
+    created() {
+      this.services = [{
+        id: 1,
+        number: "S987",
+        type: "service",
+        name: "mat fraser",
+        price: "10 euro"
+      },
         {
           id: 2,
           number: "M123",
@@ -167,171 +268,7 @@
           type: "service",
           name: "mat fraser",
           price: "10 euro"
-        },
-        {
-          id: 12,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 13,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 14,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 21,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 22,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 23,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 24,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 31,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 32,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 33,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 34,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 41,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 42,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 43,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 44,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 51,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 52,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 53,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 54,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 61,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 62,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 63,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 64,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 71,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 72,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }
-      ]
-    })
+        }];
+    }
   }
 </script>

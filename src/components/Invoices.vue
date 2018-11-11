@@ -104,7 +104,7 @@
   import router from '../router'
 
   export default {
-    name: 'Dentists',
+    name: 'Invoices',
 
 
     methods: {

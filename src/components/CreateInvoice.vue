@@ -209,26 +209,20 @@
                       <td>{{props.item.quantity}}</td>
                       <td>{{props.item.price}}</td>
                       <td>
-                        <v-checkbox
-                          :input-value="props.selected"
-                        ></v-checkbox>
+                        <v-checkbox :input-value="props.selected"></v-checkbox>
                       </td>
                       <td>
-                        <v-icon
-                          small
-                          fap
-                          color="blue"
-                          @click="editEfforts(props.item)"
-                        >
-                          edit
+                        <v-icon small
+                                fap
+                                color="blue"
+                                @click="editEfforts(props.item)"
+                        > edit
                         </v-icon>
-                        <v-icon
-                          small
-                          fap
-                          color="red"
-                          @click="deleteEffort(props.item)"
-                        >
-                          delete
+                        <v-icon small
+                                fap
+                                color="red"
+                                @click="deleteEffort(props.item)"
+                        > delete
                         </v-icon>
                       </td>
                     </tr>
@@ -289,7 +283,7 @@
           sortable: false
         },
         {
-          text: "",
+          text: "action",
           value: "",
           sortable: false
         }
@@ -332,7 +326,37 @@
     },
 
     created() {
-      this.initialize()
+      this.materials = [
+        {
+          number: "12345",
+          name: "test 1",
+          quantity: "1.0",
+          price: "65.00",
+          value: false
+        },
+        {
+          number: "23546",
+          name: "sample 2",
+          quantity: "5.2",
+          price: "123.11",
+          value: true
+        }
+      ];
+      this.efforts = [
+        {
+          number: "54231",
+          name: "testing 1",
+          quantity: "1.0",
+          price: "1.00",
+          value: true
+        }, {
+          number: "64",
+          name: "samples 123",
+          quantity: "54.2",
+          price: "145.89",
+          value: false
+        }
+      ];
     },
 
     methods: {
@@ -343,40 +367,6 @@
 
       back() {
         router.go(-1);
-      },
-
-      initialize() {
-        this.materials = [
-          {
-            number: "12345",
-            name: "test 1",
-            quantity: "1.0",
-            price: "65.00",
-            value: false
-          },
-          {
-            number: "23546",
-            name: "sample 2",
-            quantity: "5.2",
-            price: "123.11",
-            value: true
-          }
-        ];
-        this.efforts = [
-          {
-            number: "54231",
-            name: "testing 1",
-            quantity: "1.0",
-            price: "1.00",
-            value: true
-          }, {
-            number: "64",
-            name: "samples 123",
-            quantity: "54.2",
-            price: "145.89",
-            value: false
-          }
-        ];
       },
 
       editMaterial(item) {
