@@ -1,48 +1,50 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-text-field v-model="search"
-                  append-icon="search"
-                  label="suche"
-                  solo
-    ></v-text-field>
-    <v-data-table :headers="headers"
-                  :items="filteredItems"
-                  :search="search"
-                  :rows-per-page-items="[10]"
-                  item-key="number"
-    >
-      <template slot="items" slot-scope="props">
-        <tr @click="props.expanded = !props.expanded">
-          <td>{{props.item.number}}</td>
-          <td>{{props.item.name }}</td>
-          <td>{{props.item.price}}</td>
-          <td>{{props.item.type}}</td>
-        </tr>
-      </template>
-      <template slot="expand" slot-scope="props">
-        <v-card flat>
-          <v-card-action>
-            <v-btn flat color="blue">
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn flat color="red">
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-card-action>
-        </v-card>
-      </template>
-    </v-data-table>
-    <v-flex>
-      <v-btn color="green"
-             fab
-             dark
-             fixed
-             bottom
-             right
+    <v-layout column>
+      <v-text-field v-model="search"
+                    append-icon="search"
+                    label="suche"
+                    solo
+      ></v-text-field>
+      <v-data-table :headers="headers"
+                    :items="filteredItems"
+                    :search="search"
+                    :rows-per-page-items="[10]"
+                    item-key="number"
       >
-        <v-icon>add</v-icon>
-      </v-btn>
-    </v-flex>
+        <template slot="items" slot-scope="props">
+          <tr @click="props.expanded = !props.expanded">
+            <td>{{props.item.number}}</td>
+            <td>{{props.item.name }}</td>
+            <td>{{props.item.price}}</td>
+            <td>{{props.item.type}}</td>
+          </tr>
+        </template>
+        <template slot="expand" slot-scope="props">
+          <v-card flat>
+            <v-card-action>
+              <v-btn flat color="blue">
+                <v-icon>edit</v-icon>
+              </v-btn>
+              <v-btn flat color="red">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-card-action>
+          </v-card>
+        </template>
+      </v-data-table>
+      <v-flex>
+        <v-btn color="green"
+               fab
+               dark
+               fixed
+               bottom
+               right
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -83,11 +85,11 @@
         },
         {
           text: "type",
-          value: "price"
+          value: "type"
         }
       ],
       search: "",
-      filterBy: "service",
+      filterBy: "",
       samples: [
         {
           id: 1,

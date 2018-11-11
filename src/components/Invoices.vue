@@ -1,82 +1,81 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-text-field v-model="search"
-                  append-icon="search"
-                  label="suche"
-                  solo
-    ></v-text-field>
-    <v-data-table :headers="headers"
-                  :items="samples"
-                  :search="search"
-                  :rows-per-page-items="[10]"
-                  item-key="number"
-    >
-      <template slot="items" slot-scope="props">
-        <tr @click="props.expanded = !props.expanded">
-          <td>{{props.item.date}}</td>
-          <td>{{props.item.number }}</td>
-          <td>{{props.item.name}}</td>
-          <td>{{props.item.type}}</td>
-          <td>{{props.item.dentist}}</td>
-          <td>{{props.item.sum}}</td>
-        </tr>
-      </template>
-      <template slot="expand" slot-scope="props">
-        <v-card flat>
-          <v-card-action>
-            <v-btn flat color="green" @click="createPdf(props.item)">
-              <v-icon>picture_as_pdf</v-icon>
-            </v-btn>
-            <v-btn flat color="blue" @click="edit(props.item)">
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn flat color="red" @click="remove(props.item)">
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-card-action>
-        </v-card>
-      </template>
-    </v-data-table>
-    <v-speed-dial
-      v-model="fab"
-      bottom
-      right
-      fixed
-      :transition="slide-y-reverse-transition"
-    >
-      <v-btn
-        slot="activator"
+    <v-layout column>
+      <v-text-field v-model="search"
+                    append-icon="search"
+                    label="suche"
+                    solo
+      ></v-text-field>
+      <v-data-table :headers="headers"
+                    :items="samples"
+                    :search="search"
+                    :rows-per-page-items="[10]"
+                    item-key="number"
+      >
+        <template slot="items" slot-scope="props">
+          <tr @click="props.expanded = !props.expanded">
+            <td>{{props.item.date}}</td>
+            <td>{{props.item.number }}</td>
+            <td>{{props.item.name}}</td>
+            <td>{{props.item.type}}</td>
+            <td>{{props.item.dentist}}</td>
+            <td>{{props.item.sum}}</td>
+          </tr>
+        </template>
+        <template slot="expand" slot-scope="props">
+          <v-card flat>
+            <v-card-action>
+              <v-btn flat color="green" @click="createPdf(props.item)">
+                <v-icon>picture_as_pdf</v-icon>
+              </v-btn>
+              <v-btn flat color="blue" @click="edit(props.item)">
+                <v-icon>edit</v-icon>
+              </v-btn>
+              <v-btn flat color="red" @click="remove(props.item)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-card-action>
+          </v-card>
+        </template>
+      </v-data-table>
+      <v-speed-dial
         v-model="fab"
-        color="green"
-        dark
-        fab
+        bottom
+        right
+        fixed
+        :transition="slide-y-reverse-transition"
       >
-        <v-icon>add</v-icon>
-        <v-icon>close</v-icon>
-      </v-btn>
-      <!--<v-tooltip disabled left :value="true">-->
-      <v-btn
-        fab
-        dark
-        small
-        @click="createSingle()"
-      >
-        <v-icon>bookmark</v-icon>
-      </v-btn>
-      <!--<span>rechnung</span>-->
-      <!--</v-tooltip>-->
-      <!--<v-tooltip disabled left :value="true">-->
-      <v-btn
-        fab
-        dark
-        small
-        @click="createMonthly()"
-      >
-        <v-icon>bookmarks</v-icon>
-      </v-btn>
-      <!--<span>monatsrechnung</span>-->
-      <!--</v-tooltip>-->
-    </v-speed-dial>
+        <v-btn slot="activator"
+               v-model="fab"
+               color="green"
+               fab
+               dark
+        >
+          <v-icon>add</v-icon>
+          <v-icon>close</v-icon>
+        </v-btn>
+        <!--<v-tooltip fixed left :value="true">-->
+        <v-btn fab
+               dark
+               small
+               @click="createSingle()"
+        >
+          <v-icon>bookmark</v-icon>
+        </v-btn>
+        <!--<span>rechnung</span>-->
+        <!--</v-tooltip>-->
+        <!--<v-tooltip disabled left :value="true">-->
+        <v-btn fab
+               dark
+               small
+               @click="createMonthly()"
+        >
+          <v-icon>bookmarks</v-icon>
+        </v-btn>
+        <!--<span>monatsrechnung</span>-->
+        <!--</v-tooltip>-->
+      </v-speed-dial>
+    </v-layout>
   </v-container>
 </template>
 
@@ -90,7 +89,7 @@
         router.push({name: "CreateInvoice"});
       },
       createMonthly() {
-        router.push({name: "CreateInvoice"});
+        router.push({name: "CreateMonthlyInvoice"});
       },
       createPdf(item) {
         // create pdf
