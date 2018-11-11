@@ -7,6 +7,8 @@
             <v-text-field v-model="search"
                           append-icon="search"
                           label="suche"
+                          single-line
+                          clearable
             ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
@@ -27,41 +29,61 @@
                       :items="filteredItems"
                       :search="search"
                       :rows-per-page-items="[10]"
-                      item-key="number"
+                      item-key="id"
         >
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.number}}</td>
               <td>{{props.item.name }}</td>
               <td>{{props.item.price}}</td>
-              <td>{{props.item.type}}</td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
             <v-card flat>
-              <v-card-action>
+              <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn flat color="blue">
                   <v-icon>edit</v-icon>
                 </v-btn>
                 <v-btn flat color="red">
                   <v-icon>delete</v-icon>
                 </v-btn>
-              </v-card-action>
+              </v-card-actions>
             </v-card>
           </template>
         </v-data-table>
       </v-flex>
-      <v-flex>
-        <v-btn color="green"
+      <v-speed-dial
+        v-model="fab"
+        bottom
+        right
+        fixed
+        :transition="slide-y-reverse-transition"
+      >
+        <v-btn slot="activator"
+               v-model="fab"
+               color="green"
                fab
                dark
-               fixed
-               bottom
-               right
         >
           <v-icon>add</v-icon>
+          <v-icon>close</v-icon>
         </v-btn>
-      </v-flex>
+        <v-btn fab
+               dark
+               small
+               @click="createMaterial()"
+        >
+          <v-icon>store</v-icon>
+        </v-btn>
+        <v-btn fab
+               dark
+               small
+               @click="createService()"
+        >
+          <v-icon>business_center</v-icon>
+        </v-btn>
+      </v-speed-dial>
     </v-layout>
   </v-container>
 </template>
@@ -71,15 +93,20 @@
 
   export default {
     name: 'Dentists',
+
+
     methods: {
       navigate(page) {
         router.push({name: page});
       },
-      alter(item) {
+
+      edit(item) {
         // pass over item
         router.push({name: "CreateDentist"});
       }
     },
+
+
     computed: {
       filteredItems() {
         return this.samples.filter((i) => {
@@ -87,6 +114,8 @@
         })
       }
     },
+
+
     data: () => ({
       headers: [
         {
@@ -100,14 +129,11 @@
         {
           text: "einzelpreis",
           value: "price"
-        },
-        {
-          text: "type",
-          value: "type"
         }
       ],
       search: '',
       filterBy: 'material',
+      fab: false,
       samples: [
         {
           id: 1,
@@ -136,205 +162,173 @@
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 11,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 12,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 13,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 14,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 21,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 22,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 23,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 24,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 31,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 32,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 33,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 34,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 41,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 42,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 43,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 44,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 51,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 52,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 53,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 54,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 61,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 62,
           number: "M123",
           type: "material",
           name: "mat fraser",
           price: "10 euro"
         }, {
-          id: 3,
+          id: 63,
           number: "S987",
           type: "material",
           name: "kathrin d",
           price: "10 euro"
         },
         {
-          id: 4,
+          id: 64,
           number: "M123",
           type: "service",
           name: "kathrin d",
           price: "10 euro"
         }, {
-          id: 1,
+          id: 71,
           number: "S987",
           type: "service",
           name: "mat fraser",
           price: "10 euro"
         },
         {
-          id: 2,
+          id: 72,
           number: "M123",
           type: "material",
           name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 3,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 4,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 1,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        },
-        {
-          id: 2,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 3,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
           price: "10 euro"
         }
       ]

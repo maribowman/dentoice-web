@@ -18,7 +18,6 @@
               <v-flex xs12 sm6>
                 <v-menu :close-on-content-click="true"
                         v-model="fromPicker"
-                        :nudge-right="40"
                         lazy
                         reactive
                         transition="scale-transition"
@@ -42,7 +41,6 @@
               <v-flex xs12 sm6>
                 <v-menu :close-on-content-click="true"
                         v-model="toPicker"
-                        :nudge-right="40"
                         lazy
                         reactive
                         transition="scale-transition"

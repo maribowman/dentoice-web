@@ -39,7 +39,6 @@
               <v-flex xs12>
                 <v-menu :close-on-content-click="true"
                         v-model="datePicker"
-                        :nudge-right="40"
                         lazy
                         reactive
                         transition="scale-transition"

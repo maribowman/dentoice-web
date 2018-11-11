@@ -7,6 +7,8 @@
             <v-text-field v-model="search"
                           append-icon="search"
                           label="suche"
+                          single-line
+                          clearable
             ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
@@ -41,7 +43,8 @@
           </template>
           <template slot="expand" slot-scope="props">
             <v-card flat>
-              <v-card-action>
+              <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn flat color="green" @click="createPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
@@ -51,7 +54,7 @@
                 <v-btn flat color="red" @click="remove(props.item)">
                   <v-icon>delete</v-icon>
                 </v-btn>
-              </v-card-action>
+              </v-card-actions>
             </v-card>
           </template>
         </v-data-table>
@@ -102,24 +105,32 @@
 
   export default {
     name: 'Dentists',
+
+
     methods: {
       createSingle() {
         router.push({name: "CreateInvoice"});
       },
+
       createMonthly() {
         router.push({name: "CreateMonthlyInvoice"});
       },
+
       createPdf(item) {
         // create pdf
       },
+
       edit(item) {
         // pass over item
         router.push({name: "CreateInvoice"});
       },
+
       remove(item) {
         // delete object
       }
     },
+
+
     data: () => ({
       headers: [
         {
