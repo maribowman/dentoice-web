@@ -42,27 +42,33 @@
   export default {
     data: () => ({
       name: 'App',
-      menu: [{
-        title: 'leistungen',
-        icon: 'library_books',
-        route: 'Services'
-      }, {
-        title: 'zahnärzte',
-        icon: 'group',
-        route: 'Dentists'
-      }, {
-        title: 'rechnungen',
-        icon: 'attach_money',
-        route: 'Invoices'
-      }, {
-        title: 'auswertungen',
-        icon: 'bar_chart',
-        route: 'Analytics'
-      }, {
-        title: 'sonstiges',
-        icon: 'all_inclusive',
-        route: 'Misc'
-      }]
+      menu: [
+        {
+          title: 'rechnungen',
+          icon: 'euro_symbol',
+          route: 'Invoices'
+        },
+        {
+          title: 'leistungen',
+          icon: 'library_books',
+          route: 'Services'
+        },
+        {
+          title: 'zahnärzte',
+          icon: 'group',
+          route: 'Dentists'
+        },
+        {
+          title: 'auswertungen',
+          icon: 'bar_chart',
+          route: 'Analytics'
+        },
+        {
+          title: 'sonstiges',
+          icon: 'all_inclusive',
+          route: 'Misc'
+        }
+      ]
     }),
     methods: {
       navigate(page) {

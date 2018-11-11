@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Invoices from '@/components/Invoices'
+import CreateInvoice from '@/components/CreateInvoice'
+import CreateMonthlyInvoice from '@/components/CreateMonthlyInvoice'
 import Services from '@/components/Services'
 import CreateService from '@/components/CreateService'
 import Dentists from '@/components/Dentists'
 import CreateDentist from '@/components/CreateDentist'
-import Invoices from '@/components/Invoices'
-import CreateInvoice from '@/components/CreateInvoice'
-import CreateMonthlyInvoice from '@/components/CreateMonthlyInvoice'
 import Analytics from '@/components/Analytics'
 import Misc from '@/components/Misc'
 import NotFound from '@/components/NotFound'
@@ -15,6 +15,21 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path: '/invoices',
+      name: 'Invoices',
+      component: Invoices
+    },
+    {
+      path: '/invoices/create',
+      name: 'CreateInvoice',
+      component: CreateInvoice
+    },
+    {
+      path: '/invoices/createmonthly',
+      name: 'CreateMonthlyInvoice',
+      component: CreateMonthlyInvoice
+    },
     {
       path: '/services',
       name: 'Services',
@@ -34,21 +49,6 @@ export default new Router({
       path: '/dentists/create',
       name: 'CreateDentist',
       component: CreateDentist
-    },
-    {
-      path: '/invoices',
-      name: 'Invoices',
-      component: Invoices
-    },
-    {
-      path: '/invoices/create',
-      name: 'CreateInvoice',
-      component: CreateInvoice
-    },
-    {
-      path: '/invoices/createmonthly',
-      name: 'CreateMonthlyInvoice',
-      component: CreateMonthlyInvoice
     },
     {
       path: '/analytics',

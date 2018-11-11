@@ -1,38 +1,56 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-layout column>
-      <v-text-field v-model="search"
-                    append-icon="search"
-                    label="suche"
-                    solo
-      ></v-text-field>
-      <v-data-table :headers="headers"
-                    :items="filteredItems"
-                    :search="search"
-                    :rows-per-page-items="[10]"
-                    item-key="number"
-      >
-        <template slot="items" slot-scope="props">
-          <tr @click="props.expanded = !props.expanded">
-            <td>{{props.item.number}}</td>
-            <td>{{props.item.name }}</td>
-            <td>{{props.item.price}}</td>
-            <td>{{props.item.type}}</td>
-          </tr>
-        </template>
-        <template slot="expand" slot-scope="props">
-          <v-card flat>
-            <v-card-action>
-              <v-btn flat color="blue">
-                <v-icon>edit</v-icon>
-              </v-btn>
-              <v-btn flat color="red">
-                <v-icon>delete</v-icon>
-              </v-btn>
-            </v-card-action>
-          </v-card>
-        </template>
-      </v-data-table>
+    <v-layout wrap>
+      <v-flex xs12>
+        <v-toolbar>
+          <v-flex xs10>
+            <v-text-field v-model="search"
+                          append-icon="search"
+                          label="suche"
+            ></v-text-field>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-btn-toggle v-model="filterBy"
+                        class="transparent"
+          >
+            <v-btn value="material" flat>
+              <v-icon>store</v-icon>
+            </v-btn>
+            <v-btn value="service" flat>
+              <v-icon>business_center</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+        </v-toolbar>
+      </v-flex>
+      <v-flex xs12>
+        <v-data-table :headers="headers"
+                      :items="filteredItems"
+                      :search="search"
+                      :rows-per-page-items="[10]"
+                      item-key="number"
+        >
+          <template slot="items" slot-scope="props">
+            <tr @click="props.expanded = !props.expanded">
+              <td>{{props.item.number}}</td>
+              <td>{{props.item.name }}</td>
+              <td>{{props.item.price}}</td>
+              <td>{{props.item.type}}</td>
+            </tr>
+          </template>
+          <template slot="expand" slot-scope="props">
+            <v-card flat>
+              <v-card-action>
+                <v-btn flat color="blue">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+                <v-btn flat color="red">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </v-card-action>
+            </v-card>
+          </template>
+        </v-data-table>
+      </v-flex>
       <v-flex>
         <v-btn color="green"
                fab
@@ -88,8 +106,8 @@
           value: "type"
         }
       ],
-      search: "",
-      filterBy: "",
+      search: '',
+      filterBy: 'material',
       samples: [
         {
           id: 1,

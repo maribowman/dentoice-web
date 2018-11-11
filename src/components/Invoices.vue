@@ -1,43 +1,61 @@
 <template>
   <v-container fluid grid-list-md>
     <v-layout column>
-      <v-text-field v-model="search"
-                    append-icon="search"
-                    label="suche"
-                    solo
-      ></v-text-field>
-      <v-data-table :headers="headers"
-                    :items="samples"
-                    :search="search"
-                    :rows-per-page-items="[10]"
-                    item-key="number"
-      >
-        <template slot="items" slot-scope="props">
-          <tr @click="props.expanded = !props.expanded">
-            <td>{{props.item.date}}</td>
-            <td>{{props.item.number }}</td>
-            <td>{{props.item.name}}</td>
-            <td>{{props.item.type}}</td>
-            <td>{{props.item.dentist}}</td>
-            <td>{{props.item.sum}}</td>
-          </tr>
-        </template>
-        <template slot="expand" slot-scope="props">
-          <v-card flat>
-            <v-card-action>
-              <v-btn flat color="green" @click="createPdf(props.item)">
-                <v-icon>picture_as_pdf</v-icon>
-              </v-btn>
-              <v-btn flat color="blue" @click="edit(props.item)">
-                <v-icon>edit</v-icon>
-              </v-btn>
-              <v-btn flat color="red" @click="remove(props.item)">
-                <v-icon>delete</v-icon>
-              </v-btn>
-            </v-card-action>
-          </v-card>
-        </template>
-      </v-data-table>
+      <v-flex xs12>
+        <v-toolbar>
+          <v-flex xs10>
+            <v-text-field v-model="search"
+                          append-icon="search"
+                          label="suche"
+            ></v-text-field>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-btn-toggle v-model="filterBy"
+                        class="transparent"
+          >
+            <v-btn value="einzel" flat>
+              <v-icon>photo</v-icon>
+            </v-btn>
+            <v-btn value="monat" flat>
+              <v-icon>photo_library</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+        </v-toolbar>
+      </v-flex>
+      <v-flex xs12>
+        <v-data-table :headers="headers"
+                      :items="samples"
+                      :search="search"
+                      :rows-per-page-items="[10]"
+                      item-key="number"
+        >
+          <template slot="items" slot-scope="props">
+            <tr @click="props.expanded = !props.expanded">
+              <td>{{props.item.date}}</td>
+              <td>{{props.item.number }}</td>
+              <td>{{props.item.name}}</td>
+              <td>{{props.item.type}}</td>
+              <td>{{props.item.dentist}}</td>
+              <td>{{props.item.sum}}</td>
+            </tr>
+          </template>
+          <template slot="expand" slot-scope="props">
+            <v-card flat>
+              <v-card-action>
+                <v-btn flat color="green" @click="createPdf(props.item)">
+                  <v-icon>picture_as_pdf</v-icon>
+                </v-btn>
+                <v-btn flat color="blue" @click="edit(props.item)">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+                <v-btn flat color="red" @click="remove(props.item)">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </v-card-action>
+            </v-card>
+          </template>
+        </v-data-table>
+      </v-flex>
       <v-speed-dial
         v-model="fab"
         bottom
@@ -60,7 +78,7 @@
                small
                @click="createSingle()"
         >
-          <v-icon>bookmark</v-icon>
+          <v-icon>photo</v-icon>
         </v-btn>
         <!--<span>rechnung</span>-->
         <!--</v-tooltip>-->
@@ -70,7 +88,7 @@
                small
                @click="createMonthly()"
         >
-          <v-icon>bookmarks</v-icon>
+          <v-icon>photo_library</v-icon>
         </v-btn>
         <!--<span>monatsrechnung</span>-->
         <!--</v-tooltip>-->
@@ -125,7 +143,7 @@
           value: 'dentist'
         },
         {
-          text: 'betrag ($)',
+          text: 'betrag (€)',
           value: 'sum'
         }
       ],
