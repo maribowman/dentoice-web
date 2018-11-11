@@ -37,18 +37,46 @@
         </v-card>
       </template>
     </v-data-table>
-    <v-flex>
-      <v-btn color="green"
-             fab
-             dark
-             fixed
-             bottom
-             right
-             @click="create()"
+    <v-speed-dial
+      v-model="fab"
+      bottom
+      right
+      fixed
+      :transition="slide-y-reverse-transition"
+    >
+      <v-btn
+        slot="activator"
+        v-model="fab"
+        color="green"
+        dark
+        fab
       >
         <v-icon>add</v-icon>
+        <v-icon>close</v-icon>
       </v-btn>
-    </v-flex>
+      <!--<v-tooltip disabled left :value="true">-->
+      <v-btn
+        fab
+        dark
+        small
+        @click="createSingle()"
+      >
+        <v-icon>bookmark</v-icon>
+      </v-btn>
+      <!--<span>rechnung</span>-->
+      <!--</v-tooltip>-->
+      <!--<v-tooltip disabled left :value="true">-->
+      <v-btn
+        fab
+        dark
+        small
+        @click="createMonthly()"
+      >
+        <v-icon>bookmarks</v-icon>
+      </v-btn>
+      <!--<span>monatsrechnung</span>-->
+      <!--</v-tooltip>-->
+    </v-speed-dial>
   </v-container>
 </template>
 
@@ -58,7 +86,10 @@
   export default {
     name: 'Dentists',
     methods: {
-      create() {
+      createSingle() {
+        router.push({name: "CreateInvoice"});
+      },
+      createMonthly() {
         router.push({name: "CreateInvoice"});
       },
       createPdf(item) {
@@ -100,6 +131,7 @@
         }
       ],
       search: '',
+      fab: false,
       samples: [
         {
           date: '02.06.2018',
