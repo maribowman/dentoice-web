@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-layout row>
       <v-data-iterator
-        :items="samples"
+        :items="dentists"
         content-tag="v-layout"
         hide-actions
         wrap
@@ -17,15 +17,15 @@
           <v-card>
             <v-card-title row justify-space-between>
               <div>
-                <h1>{{props.item.name}}</h1>
-                <div>{{ props.item.street}}</div>
-                <div>{{ props.item.city}}</div>
+                <h1>{{props.item.firstName}} {{props.item.lastName}}</h1>
+                <div>{{props.item.street}}</div>
+                <div>{{props.item.city}}</div>
               </div>
               <v-spacer></v-spacer>
-              <v-btn icon @click="alter(item)">
+              <v-btn icon @click="routeToUpdate(props.item)">
                 <v-icon color="blue">create</v-icon>
               </v-btn>
-              <v-btn icon @click="alter(item)">
+              <v-btn icon @click="remove(props.item)">
                 <v-icon color="red">delete</v-icon>
               </v-btn>
             </v-card-title>
@@ -33,15 +33,15 @@
             <v-list>
               <v-list-tile>
                 <v-list-tile-content class="grey--text">telefon:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ props.item.phone}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{props.item.phone}}</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content class="grey--text">fax:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ props.item.fax}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{props.item.fax}}</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content class="grey--text">email:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ props.item.email}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{props.item.email}}</v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-card>
@@ -55,7 +55,7 @@
              fixed
              bottom
              right
-             @click="create()"
+             @click="routeToCreate()"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -64,75 +64,63 @@
 </template>
 
 <script>
-  import router from '../router'
+  import router from '../router';
+  import axios from 'axios';
 
   export default {
     name: 'Dentists',
+
+
     methods: {
-      create() {
+      routeToCreate() {
         router.push({name: "CreateDentist"});
       },
-      alter(item) {
-        // pass over item
-        router.push({name: "CreateDentist"});
+
+      routeToUpdate(dentist) {
+        router.push({name: "CreateDentist", params: dentist});
+      },
+
+      getById(id) {
+        axios
+          .get('http://localhost:9876/v1/dentists/', {
+            params: {
+              id: id
+            }
+          })
+          .then(response => (this.dentists = response.data))
+          .catch(error => console.log(error));
+      },
+
+      getAll() {
+        axios
+          .get('http://localhost:9876/v1/dentists')
+          .then(response => (this.dentists = response.data))
+          .catch(error => console.log(error));
+      },
+
+      remove(item) {
+        confirm(item.firstName + ' ' + item.lastName + ' wirklich löschen?') &&
+        axios
+          .delete('http://localhost:9876/v1/dentists/' + item.id)
+          .then(response => {
+            if (response.status === 200) {
+              this.getAll();
+            } else {
+              alert("something went wrong!")
+            }
+          })
+          .catch(error => console.log(error));
       }
     },
+
+
     data: () => ({
-      samples: [
-        {
-          id: 1,
-          name: "mat fraser",
-          street: "rich froning way 1",
-          city: "123456 cookville",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "mat.fraser@test.com",
-        },
-        {
-          id: 2,
-          name: "katrin davidsdottir",
-          street: "sled dog ave 1",
-          city: "123456 iceland",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "katrin.davidsdottir@test.com"
-        },
-        {
-          id: 3,
-          name: "kara webb",
-          street: "crossfit kova street",
-          city: "123456 brisbane",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "kara.webb@test.com"
-        }, {
-          id: 1,
-          name: "mat fraser",
-          street: "rich froning way 1",
-          city: "123456 cookville",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "mat.fraser@test.com",
-        },
-        {
-          id: 2,
-          name: "katrin davidsdottir",
-          street: "sled dog ave 1",
-          city: "123456 iceland",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "katrin.davidsdottir@test.com"
-        },
-        {
-          id: 3,
-          name: "kara webb",
-          street: "crossfit kova street",
-          city: "123456 brisbane",
-          phone: "+123456789",
-          fax: "+123456789",
-          email: "kara.webb@test.com"
-        }
-      ]
-    })
+      dentists: []
+    }),
+
+
+    mounted() {
+      this.getAll();
+    }
   }
 </script>

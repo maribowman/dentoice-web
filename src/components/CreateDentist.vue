@@ -7,47 +7,33 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-layout wrap>
+            <v-layout coulmn wrap>
               <v-flex xs12 sm6>
-                <v-select
-                  :items="['Herr','Frau']"
-                  label="anrede"
-                  required
-                ></v-select>
+                <v-text-field v-model="title" label="anrede" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-select
-                  :items="['Dr.','Prof. Dr.']"
-                  label="titel"
-                  required
-                ></v-select>
+                <v-text-field v-model="firstName" label="vorname" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="vorname" required></v-text-field>
+                <v-text-field v-model="lastName" label="nachname" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="nachname" required></v-text-field>
+                <v-text-field v-model="street" label="strasse" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="strasse" required></v-text-field>
+                <v-text-field v-model="zip" label="postleitzahl" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="nummer" required></v-text-field>
+                <v-text-field v-model="city" label="ort" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="postleitzahl" required></v-text-field>
+                <v-text-field v-model="phone" label="telefon"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="ort" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6>
-                <v-text-field label="telefon"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6>
-                <v-text-field label="fax"></v-text-field>
+                <v-text-field v-model="fax" label="fax"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field label="email" required></v-text-field>
+                <v-text-field v-model="email" label="email" required></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -63,17 +49,87 @@
 </template>
 
 <script>
-  import router from '../router'
+  import router from '../router';
+  import axios from 'axios';
 
   export default {
     name: 'CreateDentists',
+
+
     methods: {
       create() {
-        // make post call to backend
-        router.push({name: "Dentists"});
+        axios.post('http://localhost:9876/v1/dentists/create',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          },
+          {
+            data: {
+              title: this.title,
+              firstName: this.firstName,
+              lastName: this.lastName,
+              street: this.street,
+              zip: this.zip,
+              city: this.city,
+              phone: this.phone,
+              fax: this.fax,
+              email: this.email
+            }
+          })
+          .then(response => {
+            console.log(response);
+            if (response.status === 201) {
+              router.push({name: "Dentists"});
+            }
+          })
+          .catch(error => {
+            var errorString = '';
+            for (var i in error.response.data.errors) {
+              errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+            }
+            alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+          });
       },
+
+
       back() {
         router.go(-1);
+      }
+    },
+
+    data: () => ({
+      title: null,
+      firstName: null,
+      lastName: null,
+      street: null,
+      zip: null,
+      city: null,
+      phone: null,
+      fax: null,
+      email: null
+    }),
+
+    props:
+      ['dentist'],
+    // item: {
+    //   id: '',
+    //   firstName: '',
+    //   lastName: '',
+    //   street: '',
+    //   zip: '',
+    //   city: '',
+    //   phone: '',
+    //   fax: '',
+    //   email: ''
+    // }
+    // }
+
+    mounted() {
+      if (this.dentist) {
+        this.firstName = this.dentist.firstName;
+        this.lastName = this.dentist.lastName;
+        this.street = this.dentist.street;
       }
     }
   }

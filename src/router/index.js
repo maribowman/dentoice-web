@@ -48,7 +48,8 @@ export default new Router({
     {
       path: '/dentists/create',
       name: 'CreateDentist',
-      component: CreateDentist
+      component: CreateDentist,
+      props: true
     },
     {
       path: '/analytics',
