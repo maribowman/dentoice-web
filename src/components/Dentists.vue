@@ -77,18 +77,7 @@
       },
 
       routeToUpdate(dentist) {
-        router.push({name: "CreateDentist", params: dentist});
-      },
-
-      getById(id) {
-        axios
-          .get('http://localhost:9876/v1/dentists/', {
-            params: {
-              id: id
-            }
-          })
-          .then(response => (this.dentists = response.data))
-          .catch(error => console.log(error));
+        router.push({name: "CreateDentist", params: {dentist: dentist}});
       },
 
       getAll() {

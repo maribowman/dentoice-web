@@ -40,8 +40,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat @click="back()">abbrechen</v-btn>
-          <v-btn color="green" flat @click="create()">speichern</v-btn>
+          <v-btn flat @click="cancel()">abbrechen</v-btn>
+          <v-btn color="green" flat @click="save()">speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-layout>
@@ -57,6 +57,14 @@
 
 
     methods: {
+      save() {
+        if (!this.id) {
+          this.create();
+        } else {
+          this.update();
+        }
+      },
+
       create() {
         axios.post('http://localhost:9876/v1/dentists/create',
           {
@@ -92,13 +100,52 @@
           });
       },
 
+      update() {
+        axios.patch('http://localhost:9876/v1/dentists/' + this.id,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          },
+          {
+            data: {
+              title: this.title,
+              firstName: this.firstName,
+              lastName: this.lastName,
+              street: this.street,
+              zip: this.zip,
+              city: this.city,
+              phone: this.phone,
+              fax: this.fax,
+              email: this.email
+            }
+          })
+          .then(response => {
+            console.log(response);
+            if (response.status === 200) {
+              router.push({name: "Dentists"});
+            }
+          })
+          .catch(error => {
+            var errorString = '';
+            for (var i in error.response.data.errors) {
+              errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+            }
+            alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+          });
+      },
 
-      back() {
+      cancel() {
         router.go(-1);
       }
     },
 
+
+    props: ['dentist'],
+
+
     data: () => ({
+      id: null,
       title: null,
       firstName: null,
       lastName: null,
@@ -110,26 +157,19 @@
       email: null
     }),
 
-    props:
-      ['dentist'],
-    // item: {
-    //   id: '',
-    //   firstName: '',
-    //   lastName: '',
-    //   street: '',
-    //   zip: '',
-    //   city: '',
-    //   phone: '',
-    //   fax: '',
-    //   email: ''
-    // }
-    // }
 
     mounted() {
       if (this.dentist) {
+        this.id = this.dentist.id;
+        this.title = this.dentist.title;
         this.firstName = this.dentist.firstName;
         this.lastName = this.dentist.lastName;
         this.street = this.dentist.street;
+        this.zip = this.dentist.zip;
+        this.city = this.dentist.city;
+        this.phone = this.dentist.phone;
+        this.fax = this.dentist.fax;
+        this.email = this.dentist.email;
       }
     }
   }
