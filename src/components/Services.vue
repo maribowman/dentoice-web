@@ -29,13 +29,13 @@
                       :items="filteredItems"
                       :search="search"
                       :rows-per-page-items="[10]"
-                      item-key="id"
+                      item-key="position"
         >
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
-              <td>{{props.item.number}}</td>
+              <td>{{props.item.position}}</td>
               <td>{{props.item.name }}</td>
-              <td>{{props.item.price}}</td>
+              <td>{{props.item.pricePerUnit}}</td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
@@ -60,14 +60,14 @@
         </v-data-table>
       </v-flex>
       <v-speed-dial
-        v-model="fab"
+        v-model="dial"
         bottom
         right
         fixed
         :transition="slide-y-reverse-transition"
       >
         <v-btn slot="activator"
-               v-model="fab"
+               v-model="dial"
                color="green"
                fab
                dark
@@ -102,13 +102,17 @@
           <v-container grid-list-md>
             <v-layout column>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.number" label="position"></v-text-field>
+                <v-text-field v-model="editedItem.position"
+                              label="position"
+                              :disabled="disablePositionText"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
+                <v-text-field v-model="editedItem.name"
+                              label="bezeichnung"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.price" label="einzelpreis"></v-text-field>
+                <v-text-field v-model="editedItem.pricePerUnit"
+                              label="einzelpreis"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -124,6 +128,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   export default {
     name: 'Services',
 
@@ -142,18 +148,15 @@
       },
 
       edit(item) {
+        this.disablePositionText = true;
         this.editedIndex = this.services.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       },
 
-      remove(item) {
-        const index = this.services.indexOf(item);
-        // TODO request to BE
-        confirm('\'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.services.splice(index, 1);
-      },
 
       close() {
+        this.disablePositionText = false;
         this.dialog = false;
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem);
@@ -163,12 +166,99 @@
 
       save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.services[this.editedIndex], this.editedItem);
+          axios
+            .patch('http://localhost:9876/v1/materials/' + this.editedItem.position,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              },
+              {
+                data: {
+                  position: this.editedItem.position,
+                  type: this.editedItem.type,
+                  name: this.editedItem.name,
+                  pricePerUnit: this.editedItem.pricePerUnit
+                }
+              })
+            .then(response => {
+              console.log(response);
+              if (response.status === 200) {
+                alert('material \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich editiert!');
+                this.getAll();
+              }
+            })
+            .catch(error => {
+              const status = error.response.status;
+              if (status === 500 || status === 400) {
+                alert(error.response.data.status + ' ' + error.response.data.error + '\n' + error.response.data.message);
+              } else {
+                var errorString = '';
+                for (var i in error.response.data.errors) {
+                  errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+                }
+                alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+              }
+            });
         } else {
-          this.services.push(this.editedItem);
+          axios
+            .post('http://localhost:9876/v1/materials/create',
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              },
+              {
+                data: {
+                  position: this.editedItem.position,
+                  type: this.editedItem.type,
+                  name: this.editedItem.name,
+                  pricePerUnit: this.editedItem.pricePerUnit
+                }
+              })
+            .then(response => {
+              console.log(response);
+              if (response.status === 201) {
+                alert('material \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich gespeichert!');
+                this.getAll();
+              }
+            })
+            .catch(error => {
+              const status = error.response.status;
+              if (status === 500 || status === 400) {
+                alert(error.response.data.status + ' ' + error.response.data.error + '\n' + error.response.data.message);
+              } else {
+                var errorString = '';
+                for (var i in error.response.data.errors) {
+                  errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+                }
+                alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+              }
+            });
         }
-        // TODO request to BE
+
         this.close();
+      },
+
+      getAll() {
+        axios
+          .get('http://localhost:9876/v1/materials')
+          .then(response => (this.services = response.data))
+          .catch(error => console.log(error));
+      },
+
+      remove(item) {
+        confirm('\'' + item.position + ' - ' + item.name + '\' wirklich löschen?') &&
+        axios
+          .delete('http://localhost:9876/v1/materials/' + item.position)
+          .then(response => {
+            if (response.status === 200) {
+              this.getAll();
+            }
+          })
+          .catch(error => {
+            alert(error.response.data.status + ' ' + error.response.data.error + '\n' + error.response.data.message)
+          });
       }
     },
 
@@ -181,8 +271,8 @@
       },
 
       formTitle() {
-        var type = this.editedItem.type === 'material' ? "MATERIAL" : "LEISTUNG";
-        var action = this.editedIndex === -1 ? "HINZUFÜGEN" : "BEARBEITEN";
+        const type = this.editedItem.type === 'material' ? "MATERIAL" : "LEISTUNG";
+        const action = this.editedIndex === -1 ? "HINZUFÜGEN" : "BEARBEITEN";
         return type + ' ' + action;
       }
     },
@@ -192,15 +282,14 @@
       dialog(val) {
         val || this.close()
       }
-    }
-    ,
+    },
 
 
     data: () => ({
       headers: [
         {
           text: "position",
-          value: "number"
+          value: "position"
         },
         {
           text: "bezeichnung",
@@ -208,67 +297,35 @@
         },
         {
           text: "einzelpreis",
-          value: "price"
+          value: "pricePerUnit"
         }
       ],
       search: '',
       filterBy: '',
       services: [],
-      fab: false,
+      dial: false,
       dialog: false,
+      disablePositionText: false,
       editedIndex: -1,
       editedItem: {
-        id: '',
-        number: '',
-        type: '',
-        name: '',
-        price: ''
+        position: null,
+        type: null,
+        name: null,
+        pricePerUnit: null
       },
       defaultItem: {
         editedItem: {
-          id: '',
-          number: '',
-          type: '',
-          name: '',
-          price: ''
+          position: null,
+          type: null,
+          name: null,
+          pricePerUnit: null
         }
       }
     }),
 
-    created() {
-      this.services = [{
-        id: 1,
-        number: "S987",
-        type: "service",
-        name: "mat fraser",
-        price: "10 euro"
-      },
-        {
-          id: 2,
-          number: "M123",
-          type: "material",
-          name: "mat fraser",
-          price: "10 euro"
-        }, {
-          id: 3,
-          number: "S987",
-          type: "material",
-          name: "kathrin d",
-          price: "10 euro"
-        },
-        {
-          id: 4,
-          number: "M123",
-          type: "service",
-          name: "kathrin d",
-          price: "10 euro"
-        }, {
-          id: 11,
-          number: "S987",
-          type: "service",
-          name: "mat fraser",
-          price: "10 euro"
-        }];
+
+    mounted() {
+      this.getAll();
     }
   }
 </script>

@@ -92,8 +92,8 @@
             }
           })
           .catch(error => {
-            var errorString = '';
-            for (var i in error.response.data.errors) {
+            let errorString = '';
+            for (const i in error.response.data.errors) {
               errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
             }
             alert(error.response.data.status + ' ' + error.response.data.error + errorString)
