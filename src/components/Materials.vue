@@ -3,30 +3,17 @@
     <v-layout wrap>
       <v-flex xs12>
         <v-toolbar>
-          <v-flex xs10>
-            <v-text-field v-model="search"
-                          append-icon="search"
-                          label="suche"
-                          single-line
-                          clearable
-            ></v-text-field>
-          </v-flex>
-          <v-spacer></v-spacer>
-          <v-btn-toggle v-model="filterBy"
-                        class="transparent"
-          >
-            <v-btn value="material" flat>
-              <v-icon>store</v-icon>
-            </v-btn>
-            <v-btn value="service" flat>
-              <v-icon>business_center</v-icon>
-            </v-btn>
-          </v-btn-toggle>
+          <v-text-field v-model="search"
+                        append-icon="search"
+                        label="suche"
+                        single-line
+                        clearable
+          ></v-text-field>
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
         <v-data-table :headers="headers"
-                      :items="filteredItems"
+                      :items="materials"
                       :search="search"
                       :rows-per-page-items="[10]"
                       item-key="position"
@@ -34,8 +21,9 @@
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.position}}</td>
-              <td>{{props.item.name }}</td>
+              <td>{{props.item.name}}</td>
               <td>{{props.item.pricePerUnit}}</td>
+              <td>{{props.item.isMetal}}</td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
@@ -59,39 +47,19 @@
           </template>
         </v-data-table>
       </v-flex>
-      <v-speed-dial
-        v-model="dial"
-        bottom
-        right
-        fixed
-        transition="slide-y-reverse-transition"
-      >
-        <v-btn slot="activator"
-               v-model="dial"
-               color="green"
+      <v-flex>
+        <v-btn color="green"
                fab
                dark
+               fixed
+               bottom
+               right
+               @click="create()"
         >
           <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
         </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createMaterial()"
-        >
-          <v-icon>store</v-icon>
-        </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createEffort()"
-        >
-          <v-icon>business_center</v-icon>
-        </v-btn>
-      </v-speed-dial>
+      </v-flex>
     </v-layout>
-
 
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -102,17 +70,17 @@
           <v-container grid-list-md>
             <v-layout column>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.position"
-                              label="position"
+                <v-text-field v-model="editedItem.position" label="position"
                               :disabled="disablePositionText"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name"
-                              label="bezeichnung"></v-text-field>
+                <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.pricePerUnit"
-                              label="einzelpreis"></v-text-field>
+                <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-checkbox v-model="editedItem.isMetal" label="metall"></v-checkbox>
               </v-flex>
             </v-layout>
           </v-container>
@@ -120,7 +88,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="close()">abbrechen</v-btn>
-          <v-btn color="orange" flat @click.native="save()">hinzufügen</v-btn>
+          <v-btn color="orange" flat @click.native="save()">speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -135,21 +103,14 @@
 
 
     methods: {
-      createMaterial() {
+      create() {
         this.editedIndex = -1;
-        this.editedItem.type = 'material';
-        this.dialog = true;
-      },
-
-      createEffort() {
-        this.editedIndex = -1;
-        this.editedItem.type = 'service';
         this.dialog = true;
       },
 
       edit(item) {
         this.disablePositionText = true;
-        this.editedIndex = this.services.indexOf(item);
+        this.editedIndex = this.materials.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       },
@@ -176,9 +137,9 @@
               {
                 data: {
                   position: this.editedItem.position,
-                  type: this.editedItem.type,
                   name: this.editedItem.name,
-                  pricePerUnit: this.editedItem.pricePerUnit
+                  pricePerUnit: this.editedItem.pricePerUnit,
+                  isMetal: this.editedItem.isMetal
                 }
               })
             .then(response => {
@@ -211,9 +172,9 @@
               {
                 data: {
                   position: this.editedItem.position,
-                  type: this.editedItem.type,
                   name: this.editedItem.name,
-                  pricePerUnit: this.editedItem.pricePerUnit
+                  pricePerUnit: this.editedItem.pricePerUnit,
+                  isMetal: this.editedItem.isMetal
                 }
               })
             .then(response => {
@@ -243,7 +204,7 @@
       getAll() {
         axios
           .get('http://localhost:9876/v1/materials')
-          .then(response => (this.services = response.data))
+          .then(response => (this.materials = response.data))
           .catch(error => console.log(error));
       },
 
@@ -252,7 +213,7 @@
         axios
           .delete('http://localhost:9876/v1/materials/' + item.position)
           .then(response => {
-            if (response.status === 200) {
+            if (response.status === 204) {
               this.getAll();
             }
           })
@@ -264,16 +225,9 @@
 
 
     computed: {
-      filteredItems() {
-        return this.services.filter((i) => {
-          return !this.filterBy || (i.type === this.filterBy);
-        })
-      },
-
       formTitle() {
-        const type = this.editedItem.type === 'material' ? "MATERIAL" : "LEISTUNG";
         const action = this.editedIndex === -1 ? "HINZUFÜGEN" : "BEARBEITEN";
-        return type + ' ' + action;
+        return "MATERIAL " + action;
       }
     },
 
@@ -298,28 +252,28 @@
         {
           text: "einzelpreis",
           value: "pricePerUnit"
+        },
+        {
+          text: "metall",
+          value: "isMetal"
         }
       ],
       search: '',
-      filterBy: '',
-      services: [],
-      dial: false,
+      materials: [],
       dialog: false,
       disablePositionText: false,
       editedIndex: -1,
       editedItem: {
         position: null,
-        type: null,
         name: null,
-        pricePerUnit: null
+        pricePerUnit: null,
+        isMetal: false
       },
       defaultItem: {
-        editedItem: {
-          position: null,
-          type: null,
-          name: null,
-          pricePerUnit: null
-        }
+        position: null,
+        name: null,
+        pricePerUnit: null,
+        isMetal: false
       }
     }),
 
