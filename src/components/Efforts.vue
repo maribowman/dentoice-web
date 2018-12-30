@@ -3,30 +3,17 @@
     <v-layout wrap>
       <v-flex xs12>
         <v-toolbar>
-          <v-flex xs10>
-            <v-text-field v-model="search"
-                          append-icon="search"
-                          label="suche"
-                          single-line
-                          clearable
-            ></v-text-field>
-          </v-flex>
-          <v-spacer></v-spacer>
-          <v-btn-toggle v-model="filterBy"
-                        class="transparent"
-          >
-            <v-btn value="material" flat>
-              <v-icon>store</v-icon>
-            </v-btn>
-            <v-btn value="service" flat>
-              <v-icon>business_center</v-icon>
-            </v-btn>
-          </v-btn-toggle>
+          <v-text-field v-model="search"
+                        append-icon="search"
+                        label="suche"
+                        single-line
+                        clearable
+          ></v-text-field>
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
         <v-data-table :headers="headers"
-                      :items="filteredItems"
+                      :items="efforts"
                       :search="search"
                       :rows-per-page-items="[10]"
                       item-key="position"
@@ -59,37 +46,18 @@
           </template>
         </v-data-table>
       </v-flex>
-      <v-speed-dial
-        v-model="dial"
-        bottom
-        right
-        fixed
-        transition="slide-y-reverse-transition"
-      >
-        <v-btn slot="activator"
-               v-model="dial"
-               color="green"
+      <v-flex>
+        <v-btn color="green"
                fab
                dark
+               fixed
+               bottom
+               right
+               @click="create()"
         >
           <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
         </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createMaterial()"
-        >
-          <v-icon>store</v-icon>
-        </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createEffort()"
-        >
-          <v-icon>business_center</v-icon>
-        </v-btn>
-      </v-speed-dial>
+      </v-flex>
     </v-layout>
 
 
@@ -102,17 +70,14 @@
           <v-container grid-list-md>
             <v-layout column>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.position"
-                              label="position"
+                <v-text-field v-model="editedItem.position" label="position"
                               :disabled="disablePositionText"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name"
-                              label="bezeichnung"></v-text-field>
+                <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.pricePerUnit"
-                              label="einzelpreis"></v-text-field>
+                <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -120,7 +85,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="close()">abbrechen</v-btn>
-          <v-btn color="orange" flat @click.native="save()">hinzufügen</v-btn>
+          <v-btn color="orange" flat @click.native="save()">speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -135,21 +100,14 @@
 
 
     methods: {
-      createMaterial() {
+      create() {
         this.editedIndex = -1;
-        this.editedItem.type = 'material';
-        this.dialog = true;
-      },
-
-      createEffort() {
-        this.editedIndex = -1;
-        this.editedItem.type = 'service';
         this.dialog = true;
       },
 
       edit(item) {
         this.disablePositionText = true;
-        this.editedIndex = this.services.indexOf(item);
+        this.editedIndex = this.efforts.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       },
@@ -167,7 +125,7 @@
       save() {
         if (this.editedIndex > -1) {
           axios
-            .patch('http://localhost:9876/v1/materials/' + this.editedItem.position,
+            .patch('http://localhost:9876/v1/efforts/' + this.editedItem.position,
               {
                 headers: {
                   'Content-Type': 'application/json',
@@ -176,7 +134,6 @@
               {
                 data: {
                   position: this.editedItem.position,
-                  type: this.editedItem.type,
                   name: this.editedItem.name,
                   pricePerUnit: this.editedItem.pricePerUnit
                 }
@@ -184,7 +141,7 @@
             .then(response => {
               console.log(response);
               if (response.status === 200) {
-                alert('material \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich editiert!');
+                alert('leistung \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich editiert!');
                 this.getAll();
               }
             })
@@ -202,7 +159,7 @@
             });
         } else {
           axios
-            .post('http://localhost:9876/v1/materials/create',
+            .post('http://localhost:9876/v1/efforts/create',
               {
                 headers: {
                   'Content-Type': 'application/json',
@@ -211,7 +168,6 @@
               {
                 data: {
                   position: this.editedItem.position,
-                  type: this.editedItem.type,
                   name: this.editedItem.name,
                   pricePerUnit: this.editedItem.pricePerUnit
                 }
@@ -219,7 +175,7 @@
             .then(response => {
               console.log(response);
               if (response.status === 201) {
-                alert('material \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich gespeichert!');
+                alert('leistung \'' + this.editedItem.position + ' - ' + this.editedItem.name + '\' erfolgreich gespeichert!');
                 this.getAll();
               }
             })
@@ -242,15 +198,15 @@
 
       getAll() {
         axios
-          .get('http://localhost:9876/v1/materials')
-          .then(response => (this.services = response.data))
+          .get('http://localhost:9876/v1/efforts')
+          .then(response => (this.efforts = response.data))
           .catch(error => console.log(error));
       },
 
       remove(item) {
         confirm('\'' + item.position + ' - ' + item.name + '\' wirklich löschen?') &&
         axios
-          .delete('http://localhost:9876/v1/materials/' + item.position)
+          .delete('http://localhost:9876/v1/efforts/' + item.position)
           .then(response => {
             if (response.status === 200) {
               this.getAll();
@@ -264,16 +220,9 @@
 
 
     computed: {
-      filteredItems() {
-        return this.services.filter((i) => {
-          return !this.filterBy || (i.type === this.filterBy);
-        })
-      },
-
       formTitle() {
-        const type = this.editedItem.type === 'material' ? "MATERIAL" : "LEISTUNG";
         const action = this.editedIndex === -1 ? "HINZUFÜGEN" : "BEARBEITEN";
-        return type + ' ' + action;
+        return "LEISTUNG " + action;
       }
     },
 
@@ -301,25 +250,20 @@
         }
       ],
       search: '',
-      filterBy: '',
-      services: [],
+      efforts: [],
       dial: false,
       dialog: false,
       disablePositionText: false,
       editedIndex: -1,
       editedItem: {
         position: null,
-        type: null,
         name: null,
         pricePerUnit: null
       },
       defaultItem: {
-        editedItem: {
-          position: null,
-          type: null,
-          name: null,
-          pricePerUnit: null
-        }
+        position: null,
+        name: null,
+        pricePerUnit: null
       }
     }),
 
