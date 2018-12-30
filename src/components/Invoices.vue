@@ -64,7 +64,7 @@
         bottom
         right
         fixed
-        :transition="slide-y-reverse-transition"
+        transition="slide-y-reverse-transition"
       >
         <v-btn slot="activator"
                v-model="dial"

@@ -11,8 +11,6 @@
                 slot-scope="props"
                 xs12
                 sm6
-                md4
-                lg3
         >
           <v-card>
             <v-card-title row justify-space-between>

@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import Invoices from '@/components/Invoices'
 import CreateInvoice from '@/components/CreateInvoice'
 import CreateMonthlyInvoice from '@/components/CreateMonthlyInvoice'
-import Services from '@/components/Services'
-import CreateService from '@/components/CreateService'
+import Materials from '@/components/Materials'
+import Efforts from '@/components/Efforts'
 import Dentists from '@/components/Dentists'
 import CreateDentist from '@/components/CreateDentist'
 import Analytics from '@/components/Analytics'
@@ -31,14 +31,14 @@ export default new Router({
       component: CreateMonthlyInvoice
     },
     {
-      path: '/services',
-      name: 'Services',
-      component: Services
+      path: '/materials',
+      name: 'Materials',
+      component: Materials
     },
     {
-      path: '/services/create',
-      name: 'CreateService',
-      component: CreateService
+      path: '/efforts',
+      name: 'Efforts',
+      component: Efforts
     },
     {
       path: '/dentists',

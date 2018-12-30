@@ -49,9 +49,14 @@
           route: 'Invoices'
         },
         {
+          title: 'material',
+          icon: 'store',
+          route: 'Materials'
+        },
+        {
           title: 'leistungen',
-          icon: 'library_books',
-          route: 'Services'
+          icon: 'business_center',
+          route: 'Efforts'
         },
         {
           title: 'zahnärzte',
