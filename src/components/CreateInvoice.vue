@@ -10,7 +10,7 @@
             <v-layout wrap>
               <v-flex xs12 sm6>
                 <v-select
-                  :items="dentists.map(item => item.id + ' ' + item.lastName)"
+                  :items="dentists.map(item => item.firstName + ' ' + item.lastName)"
                   label="zahnarzt"
                   required
                 ></v-select>
@@ -48,7 +48,10 @@
                   <v-radio label="kostenvoranschlag" value="invoice-radio-kv"></v-radio>
                 </v-radio-group>
               </v-flex>
-              <v-flex xs12>
+              <v-flex xs12 sm6>
+                <v-text-field label="art der arbeit" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6>
                 <v-menu :close-on-content-click="true"
                         v-model="datePicker"
                         lazy
@@ -365,37 +368,6 @@
 
     created() {
       this.getDentists();
-      this.materials = [
-        {
-          position: "12345",
-          name: "test 1",
-          quantity: "1.0",
-          pricePerUnit: "65.00",
-          value: false
-        },
-        {
-          position: "23546",
-          name: "sample 2",
-          quantity: "5.2",
-          pricePerUnit: "123.11",
-          value: true
-        }
-      ];
-      this.efforts = [
-        {
-          position: "54231",
-          name: "testing 1",
-          quantity: "1.0",
-          pricePerUnit: "1.00",
-          value: true
-        }, {
-          position: "64",
-          name: "samples 123",
-          quantity: "54.2",
-          pricePerUnit: "145.89",
-          value: false
-        }
-      ];
     },
 
 
@@ -408,7 +380,6 @@
       },
 
       getMaterial(position) {
-        alert(this.editedItem.isMetal);
         axios
           .get('http://localhost:9876/v1/materials/' + position)
           .then(response => (this.editedItem = response.data))
