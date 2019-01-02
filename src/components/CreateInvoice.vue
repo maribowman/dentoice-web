@@ -9,14 +9,26 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6>
-                <v-text-field label="patient" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6>
                 <v-select
-                  :items="['Fraser','Vohrer', 'Ademi']"
+                  :items="dentists.map(item => item.id + ' ' + item.lastName)"
                   label="zahnarzt"
                   required
                 ></v-select>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-slider
+                  label="mwst in %"
+                  min="0"
+                  max="20"
+                  thumb-label="always"
+                  value="7"
+                ></v-slider>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-text-field label="patient" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-text-field label="zahnfarbe" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
                 <v-radio-group v-model="insuranceType"
@@ -80,18 +92,33 @@
 
                       <v-card-text>
                         <v-container grid-list-md>
-                          <v-layout wrap>
-                            <v-flex xs12 sm6 md4>
-                              <v-text-field v-model="editedItem.number" label="position"></v-text-field>
+                          <v-layout column>
+                            <v-layout row>
+                              <v-flex xs9>
+                                <v-text-field v-model="editedItem.position" label="position"></v-text-field>
+                              </v-flex>
+                              <v-flex>
+                                <v-btn @click="getMaterial(editedItem.position)">
+                                  <v-icon>search</v-icon>
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                            <v-layout row>
+                              <v-flex xs9>
+                                <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
+                              </v-flex>
+                              <v-flex>
+                                <v-checkbox v-model="editedItem.isMetal" label="metall"></v-checkbox>
+                              </v-flex>
+                            </v-layout>
+                            <v-flex xs12>
+                              <v-text-field v-model="editedItem.note" label="kommentar"></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
-                              <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12>
                               <v-text-field v-model="editedItem.quantity" label="menge"></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
-                              <v-text-field v-model="editedItem.price" label="einzelpreis"></v-text-field>
+                            <v-flex xs12>
+                              <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
                             </v-flex>
                           </v-layout>
                         </v-container>
@@ -99,8 +126,8 @@
 
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn flat @click.native="close()">abbrechen</v-btn>
-                        <v-btn color="orange" flat @click.native="saveMaterial()">hinzufügen</v-btn>
+                        <v-btn flat @click="close()">abbrechen</v-btn>
+                        <v-btn color="orange" flat @click="saveMaterial()">speichern</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -110,16 +137,16 @@
                 <v-data-table
                   :headers="headers"
                   :items="materials"
-                  item-key="number"
+                  item-key="position"
                   hide-actions
                   no-data-text="noch kein material spezifiziert"
                 >
                   <template slot="items" slot-scope="props">
                     <tr :active="props.selected" @click="props.selected = !props.selected">
-                      <td>{{props.item.number}}</td>
+                      <td>{{props.item.position}}</td>
                       <td>{{props.item.name}}</td>
                       <td>{{props.item.quantity}}</td>
-                      <td>{{props.item.price}}</td>
+                      <td>{{props.item.pricePerUnit}}</td>
                       <td>
                         <v-checkbox class="text-xs-center"
                                     :input-value="props.selected"
@@ -167,18 +194,25 @@
                       </v-card-title>
                       <v-card-text>
                         <v-container grid-list-md>
-                          <v-layout wrap>
-                            <v-flex xs12 sm6 md4>
-                              <v-text-field v-model="editedItem.number" label="position"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
+                          <v-layout column>
+                            <v-layout row>
+                              <v-flex xs9>
+                                <v-text-field v-model="editedItem.position" label="position"></v-text-field>
+                              </v-flex>
+                              <v-flex xs1>
+                                <v-btn @click="getEffort(editedItem.position)">
+                                  <v-icon>search</v-icon>
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                            <v-flex xs12>
                               <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12>
                               <v-text-field v-model="editedItem.quantity" label="menge"></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
-                              <v-text-field v-model="editedItem.price" label="einzelpreis"></v-text-field>
+                            <v-flex xs12>
+                              <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
                             </v-flex>
                           </v-layout>
                         </v-container>
@@ -187,7 +221,7 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn flat @click.native="close()">abbrechen</v-btn>
-                        <v-btn color="orange" flat @click.native="saveEffort()">hinzufügen</v-btn>
+                        <v-btn color="orange" flat @click.native="saveEffort()">speichern</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -197,17 +231,17 @@
                 <v-data-table
                   :headers="headers"
                   :items="efforts"
-                  item-key="number"
+                  item-key="position"
                   hide-actions
                   no-data-text="noch keine leistungen spezifiziert"
                 >
                   <template slot="items" slot-scope="props">
                     <tr :active="props.selected"
                         @click="props.selected = !props.selected">
-                      <td>{{props.item.number}}</td>
+                      <td>{{props.item.position}}</td>
                       <td>{{props.item.name}}</td>
                       <td>{{props.item.quantity}}</td>
-                      <td>{{props.item.price}}</td>
+                      <td>{{props.item.pricePerUnit}}</td>
                       <td>
                         <v-checkbox :input-value="props.selected"></v-checkbox>
                       </td>
@@ -244,8 +278,10 @@
   </v-container>
 </template>
 
+
 <script>
   import router from '../router'
+  import axios from 'axios';
 
   export default {
     name: 'CreateInvoice',
@@ -259,7 +295,7 @@
       headers: [
         {
           text: "position",
-          value: "number",
+          value: "position",
           sortable: false
         },
         {
@@ -274,7 +310,7 @@
         },
         {
           text: "einzelpreis",
-          value: "price",
+          value: "pricePerUnit",
           sortable: false
         },
         {
@@ -288,33 +324,34 @@
           sortable: false
         }
       ],
+      dentists: [],
       materials: [],
       selectedMaterials: [],
       efforts: [],
       selectedEfforts: [],
       editedIndex: -1,
       editedItem: {
-        number: '',
+        position: '',
         name: '',
         quantity: '',
-        price: ''
+        pricePerUnit: ''
       },
       defaultItem: {
-        editedItem: {
-          number: '',
-          name: '',
-          quantity: '',
-          price: ''
-        }
+        position: '',
+        name: '',
+        quantity: '',
+        pricePerUnit: ''
       }
 
     }),
+
 
     computed: {
       formTitle() {
         return this.editedIndex === -1 ? 'HINZUFÜGEN' : 'BEARBEITEN';
       }
     },
+
 
     watch: {
       materialsDialog(val) {
@@ -325,41 +362,82 @@
       }
     },
 
+
     created() {
+      this.getDentists();
       this.materials = [
         {
-          number: "12345",
+          position: "12345",
           name: "test 1",
           quantity: "1.0",
-          price: "65.00",
+          pricePerUnit: "65.00",
           value: false
         },
         {
-          number: "23546",
+          position: "23546",
           name: "sample 2",
           quantity: "5.2",
-          price: "123.11",
+          pricePerUnit: "123.11",
           value: true
         }
       ];
       this.efforts = [
         {
-          number: "54231",
+          position: "54231",
           name: "testing 1",
           quantity: "1.0",
-          price: "1.00",
+          pricePerUnit: "1.00",
           value: true
         }, {
-          number: "64",
+          position: "64",
           name: "samples 123",
           quantity: "54.2",
-          price: "145.89",
+          pricePerUnit: "145.89",
           value: false
         }
       ];
     },
 
+
     methods: {
+      getDentists() {
+        axios
+          .get('http://localhost:9876/v1/dentists')
+          .then(response => (this.dentists = response.data))
+          .catch(error => alert.log(error));
+      },
+
+      getMaterial(position) {
+        alert(this.editedItem.isMetal);
+        axios
+          .get('http://localhost:9876/v1/materials/' + position)
+          .then(response => (this.editedItem = response.data))
+          .catch(error => {
+              if (error.response.status === 400) {
+                alert('ungültige eingabe \'' + position + '\'!');
+              } else if (error.response.status === 404) {
+                alert('material \'' + position + '\' konnte nicht gefunden werden!');
+              }
+              alert.log(error);
+            }
+          );
+      },
+
+      getEffort(position) {
+        axios
+          .get('http://localhost:9876/v1/efforts/' + position)
+          .then(response => (this.editedItem = response.data))
+          .catch(error => {
+              if (error.response.status === 400) {
+                alert('ungültige eingabe \'' + position + '\'!');
+              } else if (error.response.status === 404) {
+                alert('leistung \'' + position + '\' konnte nicht gefunden werden!');
+              }
+              alert.log(error);
+            }
+          );
+      },
+
       create() {
         // make post call to backend
         router.push({name: "Invoices"});
@@ -383,12 +461,12 @@
 
       deleteMaterial(item) {
         const index = this.materials.indexOf(item);
-        confirm('material \'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.materials.splice(index, 1);
+        confirm('material \'' + item.position + ' - ' + item.name + '\' wirklich löschen?') && this.materials.splice(index, 1);
       },
 
       deleteEffort(item) {
         const index = this.efforts.indexOf(item);
-        confirm('leistung \'' + item.number + ' - ' + item.name + '\' wirklich löschen?') && this.efforts.splice(index, 1);
+        confirm('leistung \'' + item.position + ' - ' + item.name + '\' wirklich löschen?') && this.efforts.splice(index, 1);
       },
 
       close() {
