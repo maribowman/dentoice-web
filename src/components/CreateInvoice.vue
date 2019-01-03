@@ -9,40 +9,50 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6>
-                <v-select
-                  :items="dentists.map(item => item.firstName + ' ' + item.lastName)"
-                  label="zahnarzt"
-                  required
+                <v-select v-model="dentist"
+                          :items="dentists"
+                          :item-text="item => item.firstName + ' ' + item.lastName"
+                          label="zahnarzt"
+                          required
+                          return-object
+                          single-line
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-slider
-                  label="mwst in %"
-                  min="0"
-                  max="20"
-                  thumb-label="always"
-                  value="7"
+                <v-slider v-model="mwst"
+                          label="mwst in %"
+                          min="0"
+                          max="20"
+                          thumb-label="always"
                 ></v-slider>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="patient" required></v-text-field>
+                <v-text-field v-model="patient"
+                              label="patient"
+                              required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="zahnfarbe" required></v-text-field>
+                <v-text-field v-model="color"
+                              label="zahnfarbe"
+                              required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="art der arbeit" required></v-text-field>
+                <v-text-field v-model="description"
+                              label="art der arbeit"
+                              required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
-                <v-text-field label="xml-nummer" required></v-text-field>
+                <v-text-field v-model="xml"
+                              label="xml-nummer"
+                              required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
                 <v-radio-group v-model="insuranceType"
                                row
                                mandatory
                 >
-                  <v-radio label="kasse" value="insurance-radio-kasse"></v-radio>
-                  <v-radio label="privat" value="insurance-radio-privat"></v-radio>
+                  <v-radio label="kasse" value="KASSE"></v-radio>
+                  <v-radio label="privat" value="PRIVAT"></v-radio>
                 </v-radio-group>
               </v-flex>
               <v-flex xs12 sm6>
@@ -50,13 +60,13 @@
                                row
                                mandatory
                 >
-                  <v-radio label="rechnung" value="invoice-radio-rechnung"></v-radio>
-                  <v-radio label="kostenvoranschlag" value="invoice-radio-kv"></v-radio>
+                  <v-radio label="rechnung" value="INVOICE"></v-radio>
+                  <v-radio label="kostenvoranschlag" value="ESTIMATE"></v-radio>
                 </v-radio-group>
               </v-flex>
               <v-flex xs12>
-                <v-menu :close-on-content-click="true"
-                        v-model="datePicker"
+                <v-menu v-model="datePicker"
+                        :close-on-content-click="true"
                         lazy
                         reactive
                         transition="scale-transition"
@@ -118,7 +128,7 @@
                               </v-flex>
                             </v-layout>
                             <v-flex xs12>
-                              <v-text-field v-model="editedItem.note" label="kommentar"></v-text-field>
+                              <v-text-field v-model="editedItem.notes" label="kommentar"></v-text-field>
                             </v-flex>
                             <v-flex xs12>
                               <v-text-field v-model="editedItem.quantity" label="menge"></v-text-field>
@@ -153,11 +163,6 @@
                       <td>{{props.item.name}}</td>
                       <td>{{props.item.quantity}}</td>
                       <td>{{props.item.pricePerUnit}}</td>
-                      <td>
-                        <v-checkbox class="text-xs-center"
-                                    :input-value="props.selected"
-                        ></v-checkbox>
-                      </td>
                       <td>
                         <v-icon
                           small
@@ -249,9 +254,6 @@
                       <td>{{props.item.quantity}}</td>
                       <td>{{props.item.pricePerUnit}}</td>
                       <td>
-                        <v-checkbox :input-value="props.selected"></v-checkbox>
-                      </td>
-                      <td>
                         <v-icon small
                                 fap
                                 color="blue"
@@ -291,9 +293,17 @@
 
   export default {
     name: 'CreateInvoice',
+
     data: () => ({
-      insuranceType: '',
-      invoiceType: '',
+      dentists: [],
+      dentist: null,
+      mwst: 7,
+      patient: null,
+      color: null,
+      description: null,
+      xml: null,
+      insuranceType: null,
+      invoiceType: null,
       date: new Date().toISOString().substr(0, 10),
       datePicker: '',
       materialsDialog: false,
@@ -320,21 +330,13 @@
           sortable: false
         },
         {
-          text: "privat",
-          value: "type",
-          sortable: false
-        },
-        {
           text: "action",
           value: "",
           sortable: false
         }
       ],
-      dentists: [],
       materials: [],
-      selectedMaterials: [],
       efforts: [],
-      selectedEfforts: [],
       editedIndex: -1,
       editedItem: {
         position: '',
@@ -348,7 +350,6 @@
         quantity: '',
         pricePerUnit: ''
       }
-
     }),
 
 
@@ -413,8 +414,42 @@
       },
 
       create() {
-        // make post call to backend
-        router.push({name: "Invoices"});
+        axios.post('http://localhost:9876/v1/invoices/create',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          },
+          {
+            data: {
+              dentist: this.dentist.id,
+              patient: this.patient,
+              color: this.color,
+              description: this.description,
+              xmlNumber: this.xml,
+              invoiceType: this.invoiceType,
+              insuranceType: this.insuranceType,
+              date: this.date,
+              mwst: this.mwst,
+              efforts: this.efforts,
+              materials: this.materials
+            }
+          })
+          .then(response => {
+            console.log(response);
+            if (response.status === 201) {
+              router.push({name: "Invoices"});
+            }
+          })
+          .catch(error => {
+            let errorString = '';
+            for (const i in error.response.data.errors) {
+              errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+            }
+            alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+          });
+
+
       },
 
       back() {
