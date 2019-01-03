@@ -31,6 +31,12 @@
                 <v-text-field label="zahnfarbe" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
+                <v-text-field label="art der arbeit" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-text-field label="xml-nummer" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6>
                 <v-radio-group v-model="insuranceType"
                                row
                                mandatory
@@ -48,10 +54,7 @@
                   <v-radio label="kostenvoranschlag" value="invoice-radio-kv"></v-radio>
                 </v-radio-group>
               </v-flex>
-              <v-flex xs12 sm6>
-                <v-text-field label="art der arbeit" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6>
+              <v-flex xs12>
                 <v-menu :close-on-content-click="true"
                         v-model="datePicker"
                         lazy
