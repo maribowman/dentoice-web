@@ -20,7 +20,7 @@
                 <div>{{props.item.city}}</div>
               </div>
               <v-spacer></v-spacer>
-              <v-btn icon @click="routeToUpdate(props.item)">
+              <v-btn icon @click="edit(props.item)">
                 <v-icon color="blue">create</v-icon>
               </v-btn>
               <v-btn icon @click="remove(props.item)">
@@ -53,7 +53,7 @@
              fixed
              bottom
              right
-             @click="routeToCreate()"
+             @click="create()"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -70,11 +70,11 @@
 
 
     methods: {
-      routeToCreate() {
+      create() {
         router.push({name: "CreateDentist"});
       },
 
-      routeToUpdate(dentist) {
+      edit(dentist) {
         router.push({name: "CreateDentist", params: {dentist: dentist}});
       },
 
@@ -82,7 +82,7 @@
         axios
           .get('http://localhost:9876/v1/dentists')
           .then(response => (this.dentists = response.data))
-          .catch(error => console.log(error));
+          .catch(error => alert.log(error));
       },
 
       remove(item) {
@@ -96,7 +96,7 @@
               alert("something went wrong!")
             }
           })
-          .catch(error => console.log(error));
+          .catch(error => alert.log(error));
       }
     },
 

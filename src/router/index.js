@@ -26,6 +26,11 @@ export default new Router({
       component: CreateInvoice
     },
     {
+      path: '/invoices/edit/:id',
+      name: 'CreateInvoice',
+      component: CreateInvoice
+    },
+    {
       path: '/invoices/createmonthly',
       name: 'CreateMonthlyInvoice',
       component: CreateMonthlyInvoice
@@ -51,6 +56,12 @@ export default new Router({
       component: CreateDentist,
       props: true
     },
+    // {
+    //   path: '/dentists/edit/:id',
+    //   name: 'CreateDentist',
+    //   component: CreateDentist,
+    //   props: true
+    // },
     {
       path: '/analytics',
       name: 'Analytics',

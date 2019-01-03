@@ -29,26 +29,28 @@
                       :items="invoices"
                       :search="search"
                       :rows-per-page-items="[10]"
-                      item-key="number"
+                      item-key="id"
         >
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.date}}</td>
-              <td>{{props.item.number }}</td>
-              <td>{{props.item.name}}</td>
-              <td>{{props.item.type}}</td>
-              <td>{{props.item.dentist}}</td>
-              <td>{{props.item.sum}}</td>
+              <td>{{props.item.id }}</td>
+              <td>{{props.item.patient}}</td>
+              <td>{{props.item.dentist.firstName + ' ' + props.item.dentist.lastName}}</td>
+              <td>{{props.item.brutto}}</td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat color="green" @click="createPdf(props.item)">
+                <v-btn flat color="green" @click="getXml(props.item)">
+                  <v-icon>code</v-icon>
+                </v-btn>
+                <v-btn flat color="green" @click="getSinglePdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
-                <v-btn flat color="blue" @click="edit(props.item)">
+                <v-btn flat color="blue" @click="editSingle(props.item)">
                   <v-icon>edit</v-icon>
                 </v-btn>
                 <v-btn flat color="red" @click="remove(props.item)">
@@ -75,7 +77,6 @@
           <v-icon>add</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
-        <!--<v-tooltip fixed left :value="true">-->
         <v-btn fab
                dark
                small
@@ -83,9 +84,6 @@
         >
           <v-icon>photo</v-icon>
         </v-btn>
-        <!--<span>rechnung</span>-->
-        <!--</v-tooltip>-->
-        <!--<v-tooltip disabled left :value="true">-->
         <v-btn fab
                dark
                small
@@ -93,8 +91,6 @@
         >
           <v-icon>photo_library</v-icon>
         </v-btn>
-        <!--<span>monatsrechnung</span>-->
-        <!--</v-tooltip>-->
       </v-speed-dial>
     </v-layout>
   </v-container>
@@ -102,33 +98,85 @@
 
 <script>
   import router from '../router'
+  import axios from 'axios';
 
   export default {
     name: 'Invoices',
 
 
     methods: {
+      getAll() {
+        axios
+          .get('http://localhost:9876/v1/invoices?page=0&size=10')
+          .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
+          .catch(error => alert.log(error));
+      },
+
       createSingle() {
         router.push({name: "CreateInvoice"});
+      },
+
+      editSingle(item) {
+        confirm(invoice.dentist.firstName.toString());
+        router.push({name: "CreateInvoice", params: {invoice: invoice}});
       },
 
       createMonthly() {
         router.push({name: "CreateMonthlyInvoice"});
       },
 
-      createPdf(item) {
-        // create pdf
+      getSinglePdf(item) {
+        axios({
+          url: `http://localhost:9876/v1/invoices/${item.id}/pdf`,
+          method: 'GET',
+          responseType: 'blob'
+        }).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `${item.id}.pdf`);
+          document.body.appendChild(link);
+          link.click();
+        });
       },
 
-      edit(item) {
-        // pass over item
-        router.push({name: "CreateInvoice"});
+      getXml(item) {
+        axios({
+          url: `http://localhost:9876/v1/invoices/${item.id}/xml`,
+          method: 'GET',
+          responseType: 'blob'
+        })
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${item.xmlNumber}.xml`);
+            document.body.appendChild(link);
+            link.click();
+          });
       },
 
       remove(item) {
-        // delete object
+        confirm(`rechnung ${item.id} wirklich löschen?`) &&
+        axios
+          .delete(`http://localhost:9876/v1/invoices/${item.id}`)
+          .then(response => {
+            if (response.status === 204) {
+              this.getAll();
+            } else {
+              alert(`could not delete ${item.id}.something went wrong!`)
+            }
+          })
+          .catch(error => alert.log(error));
       }
-    },
+    }
+    ,
+
+
+    created() {
+      this.getAll();
+    }
+    ,
 
 
     data: () => ({
@@ -139,15 +187,11 @@
         },
         {
           text: 'nummer',
-          value: 'number'
+          value: 'id'
         },
         {
           text: 'patient',
-          value: 'name'
-        },
-        {
-          text: 'art',
-          value: 'type'
+          value: 'patient'
         },
         {
           text: 'zahnarzt',
@@ -155,7 +199,7 @@
         },
         {
           text: 'betrag (€)',
-          value: 'sum'
+          value: 'brutto'
         }
       ],
       filterBy: null,

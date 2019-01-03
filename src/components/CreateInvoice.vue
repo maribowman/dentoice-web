@@ -372,6 +372,10 @@
 
     created() {
       this.getDentists();
+      if (this.$route.params.id) {
+        this.loadInvoice(this.$route.params.id);
+      }
+
     },
 
 
@@ -448,8 +452,27 @@
             }
             alert(error.response.data.status + ' ' + error.response.data.error + errorString)
           });
+      },
 
-
+      loadInvoice(id) {
+        axios
+          .get(`http://localhost:9876/v1/invoices/${id}`)
+          .then(response => {
+              // const data = response.data;
+              this.dentist = response.data.dentist;
+              this.patient = response.data.patient;
+              this.color = response.data.color;
+              this.description = response.data.description;
+              this.xml = response.data.xmlNumber;
+              this.invoiceType = response.data.invoiceType;
+              this.insuranceType = response.data.insuranceType;
+              this.date = response.data.date;
+              this.mwst = response.data.mwst;
+              this.efforts = response.data.costs.efforts;
+              this.materials = response.data.costs.materials
+            }
+          )
+          .catch(error => alert.log(error));
       },
 
       back() {
