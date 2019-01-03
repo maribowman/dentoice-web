@@ -23,7 +23,14 @@
               <td>{{props.item.position}}</td>
               <td>{{props.item.name}}</td>
               <td>{{props.item.pricePerUnit}}</td>
-              <td>{{props.item.isMetal}}</td>
+              <td>
+                <v-checkbox
+                  :input-value="props.item.isMetal"
+                  primary
+                  hide-details
+                  readonly
+                ></v-checkbox>
+              </td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
