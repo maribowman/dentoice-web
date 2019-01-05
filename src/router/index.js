@@ -28,7 +28,7 @@ export default new Router({
     },
     {
       path: '/invoices/edit/:id',
-      name: 'CreateInvoice',
+      name: 'EditInvoice',
       component: CreateInvoice
     },
     {
@@ -43,7 +43,7 @@ export default new Router({
     },
     {
       path: '/invoices/monthly/edit/:id',
-      name: 'CreateInvoice',
+      name: 'EditMonthlyInvoice',
       component: CreateMonthlyInvoice
     },
     {

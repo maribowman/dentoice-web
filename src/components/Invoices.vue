@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex xs12>
         <v-toolbar>
-          <v-flex xs10>
+          <v-flex xs12 sm4>
             <v-text-field v-model="search"
                           append-icon="search"
                           label="suche"
@@ -11,17 +11,64 @@
                           clearable
             ></v-text-field>
           </v-flex>
-          <v-spacer></v-spacer>
-          <v-btn-toggle v-model="filterBy"
-                        class="transparent"
-          >
-            <v-btn value="einzel" flat>
-              <v-icon>photo</v-icon>
-            </v-btn>
-            <v-btn value="monat" flat>
-              <v-icon>photo_library</v-icon>
-            </v-btn>
-          </v-btn-toggle>
+          <v-divider></v-divider>
+          <v-flex xs12 sm4>
+            <v-select v-model="dentist"
+                      :items="dentists"
+                      :item-text="item => item.firstName + ' ' + item.lastName"
+                      label="zahnarzt"
+                      required
+                      return-object
+                      single-line
+                      clearable
+            ></v-select>
+          </v-flex>
+          <v-flex xs12 sm2>
+            <v-menu :close-on-content-click="true"
+                    v-model="fromPicker"
+                    lazy
+                    reactive
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+              <v-text-field slot="activator"
+                            v-model="fromDate"
+                            prepend-icon="event"
+                            label="von"
+                            readonly
+              ></v-text-field>
+              <v-date-picker v-model="fromDate"
+                             @click="fromDate = false"
+                             first-day-of-week="1"
+                             locale="de-de"
+              ></v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm2>
+            <v-menu :close-on-content-click="true"
+                    v-model="toPicker"
+                    lazy
+                    reactive
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+              <v-text-field slot="activator"
+                            v-model="toDate"
+                            prepend-icon="event"
+                            label="bis"
+                            readonly
+              ></v-text-field>
+              <v-date-picker v-model="toDate"
+                             @click="toDate = false"
+                             first-day-of-week="1"
+                             locale="de-de"
+              ></v-date-picker>
+            </v-menu>
+          </v-flex>
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
@@ -47,10 +94,10 @@
                 <v-btn flat color="green" @click="getXml(props.item)">
                   <v-icon>code</v-icon>
                 </v-btn>
-                <v-btn flat color="green" @click="getSinglePdf(props.item)">
+                <v-btn flat color="green" @click="getPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
-                <v-btn flat color="blue" @click="editSingle(props.item)">
+                <v-btn flat color="blue" @click="edit(props.item)">
                   <v-icon>edit</v-icon>
                 </v-btn>
                 <v-btn flat color="red" @click="remove(props.item)">
@@ -61,37 +108,18 @@
           </template>
         </v-data-table>
       </v-flex>
-      <v-speed-dial
-        v-model="dial"
-        bottom
-        right
-        fixed
-        transition="slide-y-reverse-transition"
-      >
-        <v-btn slot="activator"
-               v-model="dial"
-               color="green"
+      <v-flex>
+        <v-btn color="green"
                fab
                dark
+               fixed
+               bottom
+               right
+               @click="create()"
         >
           <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
         </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createSingle()"
-        >
-          <v-icon>photo</v-icon>
-        </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createMonthly()"
-        >
-          <v-icon>photo_library</v-icon>
-        </v-btn>
-      </v-speed-dial>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -107,25 +135,22 @@
     methods: {
       getAll() {
         axios
-          .get('http://localhost:9876/v1/invoices?page=0&size=10')
-          .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
+        // .get('http://localhost:9876/v1/invoices?page=0&size=10')
+          .get(`http://localhost:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`)
+          .then(response => (this.invoices = response.data))
+          // .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
           .catch(error => alert.log(error));
       },
 
-      createSingle() {
+      create() {
         router.push({name: "CreateInvoice"});
       },
 
-      editSingle(item) {
-        confirm(invoice.dentist.firstName.toString());
-        router.push({name: "CreateInvoice", params: {invoice: invoice}});
+      edit(invoice) {
+        router.push({name: "EditInvoice", params: {id: invoice.id}});
       },
 
-      createMonthly() {
-        router.push({name: "CreateMonthlyInvoice"});
-      },
-
-      getSinglePdf(item) {
+      getPdf(item) {
         axios({
           url: `http://localhost:9876/v1/invoices/${item.id}/pdf`,
           method: 'GET',
@@ -168,18 +193,45 @@
             }
           })
           .catch(error => alert.log(error));
+      },
+
+      getDentists() {
+        axios
+          .get('http://localhost:9876/v1/dentists')
+          .then(response => (this.dentists = response.data))
+          .catch(error => alert.log(error));
       }
     }
     ,
 
-
-    created() {
+    async created() {
       this.getAll();
-    }
-    ,
+      this.getDentists();
+    },
+
+
+    watch: {
+      dentist: function () {
+        this.getAll()
+      },
+      fromPicker: function () {
+        this.getAll()
+      },
+      toPicker: function () {
+        this.getAll()
+      }
+    },
 
 
     data: () => ({
+      search: '',
+      dentists: [],
+      dentist: null,
+      fromDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().substr(0, 10),
+      fromPicker: '',
+      toDate: new Date().toISOString().substr(0, 10),
+      toPicker: '',
+      invoices: [],
       headers: [
         {
           text: 'datum',
@@ -201,11 +253,7 @@
           text: 'betrag (€)',
           value: 'brutto'
         }
-      ],
-      filterBy: null,
-      search: '',
-      dial: false,
-      invoices: []
+      ]
     })
   }
 </script>

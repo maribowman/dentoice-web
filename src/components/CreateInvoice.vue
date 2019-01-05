@@ -370,12 +370,11 @@
     },
 
 
-    created() {
+    async created() {
       this.getDentists();
       if (this.$route.params.id) {
         this.loadInvoice(this.$route.params.id);
       }
-
     },
 
 
@@ -389,13 +388,13 @@
 
       getMaterial(position) {
         axios
-          .get('http://localhost:9876/v1/materials/' + position)
+          .get(`http://localhost:9876/v1/materials/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
-                alert('ungültige eingabe \'' + position + '\'!');
+                alert(`ungültige eingabe \'${position}\'!`);
               } else if (error.response.status === 404) {
-                alert('material \'' + position + '\' konnte nicht gefunden werden!');
+                alert(`material \'${position}\' konnte nicht gefunden werden!`);
               }
               alert.log(error);
             }
@@ -404,13 +403,13 @@
 
       getEffort(position) {
         axios
-          .get('http://localhost:9876/v1/efforts/' + position)
+          .get(`http://localhost:9876/v1/efforts/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
-                alert('ungültige eingabe \'' + position + '\'!');
+                alert(`ungültige eingabe \'${position}\'!`);
               } else if (error.response.status === 404) {
-                alert('leistung \'' + position + '\' konnte nicht gefunden werden!');
+                alert(`leistung \'${position}\' konnte nicht gefunden werden!`);
               }
               alert.log(error);
             }
@@ -493,12 +492,12 @@
 
       deleteMaterial(item) {
         const index = this.materials.indexOf(item);
-        confirm('material \'' + item.position + ' - ' + item.name + '\' wirklich löschen?') && this.materials.splice(index, 1);
+        confirm(`material \'${item.position} - ${item.name}\' wirklich löschen?`) && this.materials.splice(index, 1);
       },
 
       deleteEffort(item) {
         const index = this.efforts.indexOf(item);
-        confirm('leistung \'' + item.position + ' - ' + item.name + '\' wirklich löschen?') && this.efforts.splice(index, 1);
+        confirm(`leistung \'${item.position} - ${item.name}\' wirklich löschen?`) && this.efforts.splice(index, 1);
       },
 
       close() {
