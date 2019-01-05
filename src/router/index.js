@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Invoices from '@/components/Invoices'
 import CreateInvoice from '@/components/CreateInvoice'
+import MonthlyInvoices from '@/components/MonthlyInvoices'
 import CreateMonthlyInvoice from '@/components/CreateMonthlyInvoice'
 import Materials from '@/components/Materials'
 import Efforts from '@/components/Efforts'
@@ -31,8 +32,18 @@ export default new Router({
       component: CreateInvoice
     },
     {
-      path: '/invoices/createmonthly',
+      path: '/invoices/monthly',
+      name: 'MonthlyInvoices',
+      component: MonthlyInvoices
+    },
+    {
+      path: '/invoices/monthly/create',
       name: 'CreateMonthlyInvoice',
+      component: CreateMonthlyInvoice
+    },
+    {
+      path: '/invoices/monthly/edit/:id',
+      name: 'CreateInvoice',
       component: CreateMonthlyInvoice
     },
     {

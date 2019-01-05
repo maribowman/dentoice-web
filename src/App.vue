@@ -49,6 +49,11 @@
           route: 'Invoices'
         },
         {
+          title: 'monatsrechnungen',
+          icon: 'trending_up',
+          route: 'MonthlyInvoices'
+        },
+        {
           title: 'material',
           icon: 'store',
           route: 'Materials'
