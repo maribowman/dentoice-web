@@ -381,14 +381,14 @@
     methods: {
       getDentists() {
         axios
-          .get('http://localhost:9876/v1/dentists')
+          .get('http://192.168.0.59:9876/v1/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       },
 
       getMaterial(position) {
         axios
-          .get(`http://localhost:9876/v1/materials/${position}`)
+          .get(`http://192.168.0.59:9876/v1/materials/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
@@ -403,7 +403,7 @@
 
       getEffort(position) {
         axios
-          .get(`http://localhost:9876/v1/efforts/${position}`)
+          .get(`http://192.168.0.59:9876/v1/efforts/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
@@ -417,7 +417,7 @@
       },
 
       create() {
-        axios.post('http://localhost:9876/v1/invoices/create',
+        axios.post('http://192.168.0.59:9876/v1/invoices/create',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -455,7 +455,7 @@
 
       loadInvoice(id) {
         axios
-          .get(`http://localhost:9876/v1/invoices/${id}`)
+          .get(`http://192.168.0.59:9876/v1/invoices/${id}`)
           .then(response => {
               // const data = response.data;
               this.dentist = response.data.dentist;

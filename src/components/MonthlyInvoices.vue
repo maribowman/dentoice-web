@@ -23,6 +23,7 @@
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.date}}</td>
+              <td>{{props.item.id}}</td>
               <td>{{props.item.dentist.firstName + ' ' + props.item.dentist.lastName}}</td>
               <td>{{props.item.brutto}}</td>
             </tr>
@@ -91,7 +92,7 @@
     methods: {
       getAll() {
         axios
-          .get('http://localhost:9876/v1/invoices?page=0&size=10')
+          .get('http://192.168.0.59:9876/v1/invoices?page=0&size=10')
           .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
           .catch(error => alert.log(error));
       },
@@ -111,7 +112,7 @@
 
       getSinglePdf(item) {
         axios({
-          url: `http://localhost:9876/v1/invoices/${item.id}/pdf`,
+          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -126,7 +127,7 @@
 
       getXml(item) {
         axios({
-          url: `http://localhost:9876/v1/invoices/${item.id}/xml`,
+          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/xml`,
           method: 'GET',
           responseType: 'blob'
         })
@@ -143,7 +144,7 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://localhost:9876/v1/invoices/${item.id}`)
+          .delete(`http://192.168.0.59:9876/v1/invoices/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();

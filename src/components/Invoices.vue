@@ -136,7 +136,7 @@
       getAll() {
         axios
         // .get('http://localhost:9876/v1/invoices?page=0&size=10')
-          .get(`http://localhost:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`)
+          .get(`http://192.168.0.59:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`)
           .then(response => (this.invoices = response.data))
           // .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
           .catch(error => alert.log(error));
@@ -152,7 +152,7 @@
 
       getPdf(item) {
         axios({
-          url: `http://localhost:9876/v1/invoices/${item.id}/pdf`,
+          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -167,7 +167,7 @@
 
       getXml(item) {
         axios({
-          url: `http://localhost:9876/v1/invoices/${item.id}/xml`,
+          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/xml`,
           method: 'GET',
           responseType: 'blob'
         })
@@ -184,7 +184,7 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://localhost:9876/v1/invoices/${item.id}`)
+          .delete(`http://192.168.0.59:9876/v1/invoices/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();
@@ -197,14 +197,14 @@
 
       getDentists() {
         axios
-          .get('http://localhost:9876/v1/dentists')
+          .get('http://192.168.0.59:9876/v1/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       }
     }
     ,
 
-    async created() {
+    created() {
       this.getAll();
       this.getDentists();
     },
