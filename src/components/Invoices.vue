@@ -125,7 +125,6 @@
 </template>
 
 <script>
-  import router from '../router'
   import axios from 'axios';
 
   export default {
@@ -143,11 +142,11 @@
       },
 
       create() {
-        router.push({name: "CreateInvoice"});
+        this.$router.push({name: "CreateInvoice"});
       },
 
       edit(invoice) {
-        router.push({name: "EditInvoice", params: {id: invoice.id}});
+        this.$router.push({name: "EditInvoice", params: {id: invoice.id}});
       },
 
       getPdf(item) {

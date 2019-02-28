@@ -49,7 +49,6 @@
 </template>
 
 <script>
-  import router from '../router';
   import axios from 'axios';
 
   export default {
@@ -88,7 +87,7 @@
           .then(response => {
             console.log(response);
             if (response.status === 201) {
-              router.push({name: "Dentists"});
+              this.$router.push({name: "Dentists"});
             }
           })
           .catch(error => {
@@ -123,7 +122,7 @@
           .then(response => {
             console.log(response);
             if (response.status === 200) {
-              router.push({name: "Dentists"});
+              this.$router.push({name: "Dentists"});
             }
           })
           .catch(error => {
@@ -136,7 +135,7 @@
       },
 
       cancel() {
-        router.go(-1);
+        this.$router.go(-1);
       }
     },
 

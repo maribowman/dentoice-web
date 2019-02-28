@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex xs12>
         <v-toolbar>
-          <v-flex xs10>
+          <v-flex xs12 sm4>
             <v-text-field v-model="search"
                           append-icon="search"
                           label="suche"
@@ -11,6 +11,18 @@
                           clearable
             ></v-text-field>
           </v-flex>
+          <v-flex xs12 sm4>
+            <v-select v-model="dentist"
+                      :items="dentists"
+                      :item-text="item => item.firstName + ' ' + item.lastName"
+                      label="zahnarzt"
+                      required
+                      return-object
+                      single-line
+                      clearable
+            ></v-select>
+          </v-flex>
+
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
@@ -23,7 +35,8 @@
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.date}}</td>
-              <td>{{props.item.id}}</td>
+              <td>{{props.item.id }}</td>
+              <td>{{props.item.patient}}</td>
               <td>{{props.item.dentist.firstName + ' ' + props.item.dentist.lastName}}</td>
               <td>{{props.item.brutto}}</td>
             </tr>
@@ -32,10 +45,13 @@
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat color="green" @click="getSinglePdf(props.item)">
+                <v-btn flat color="green" @click="getXml(props.item)">
+                  <v-icon>code</v-icon>
+                </v-btn>
+                <v-btn flat color="green" @click="getPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
-                <v-btn flat color="blue" @click="editSingle(props.item)">
+                <v-btn flat color="blue" @click="edit(props.item)">
                   <v-icon>edit</v-icon>
                 </v-btn>
                 <v-btn flat color="red" @click="remove(props.item)">
@@ -46,71 +62,45 @@
           </template>
         </v-data-table>
       </v-flex>
-      <v-speed-dial
-        v-model="dial"
-        bottom
-        right
-        fixed
-        transition="slide-y-reverse-transition"
-      >
-        <v-btn slot="activator"
-               v-model="dial"
-               color="green"
+      <v-flex>
+        <v-btn color="green"
                fab
                dark
+               fixed
+               bottom
+               right
+               @click="create()"
         >
           <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
         </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createSingle()"
-        >
-          <v-icon>photo</v-icon>
-        </v-btn>
-        <v-btn fab
-               dark
-               small
-               @click="createMonthly()"
-        >
-          <v-icon>photo_library</v-icon>
-        </v-btn>
-      </v-speed-dial>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-  import router from '../router'
   import axios from 'axios';
 
   export default {
     name: 'Invoices',
 
-
     methods: {
       getAll() {
         axios
-          .get('http://192.168.0.59:9876/v1/invoices?page=0&size=10')
-          .then(response => (this.invoices = response.data._embedded.invoiceEntityList))
+          .get(`http://192.168.0.59:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`)
+          .then(response => (this.invoices = response.data))
           .catch(error => alert.log(error));
       },
 
-      createSingle() {
-        router.push({name: "CreateInvoice"});
+      create() {
+        this.$router.push({name: "CreateMonthlyInvoice"});
       },
 
-      editSingle(item) {
-        confirm(invoice.dentist.firstName.toString());
-        router.push({name: "CreateInvoice", params: {invoice: invoice}});
+      edit(invoice) {
+        this.$router.push({name: "EditInvoice", params: {id: invoice.id}});
       },
 
-      createMonthly() {
-        router.push({name: "CreateMonthlyInvoice"});
-      },
-
-      getSinglePdf(item) {
+      getPdf(item) {
         axios({
           url: `http://192.168.0.59:9876/v1/invoices/${item.id}/pdf`,
           method: 'GET',
@@ -125,22 +115,6 @@
         });
       },
 
-      getXml(item) {
-        axios({
-          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/xml`,
-          method: 'GET',
-          responseType: 'blob'
-        })
-          .then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${item.xmlNumber}.xml`);
-            document.body.appendChild(link);
-            link.click();
-          });
-      },
-
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
@@ -153,18 +127,35 @@
             }
           })
           .catch(error => alert.log(error));
+      },
+
+      getDentists() {
+        axios
+          .get('http://192.168.0.59:9876/v1/dentists')
+          .then(response => (this.dentists = response.data))
+          .catch(error => alert.log(error));
       }
     }
     ,
 
-
     created() {
       this.getAll();
-    }
-    ,
+      this.getDentists();
+    },
+
+
+    watch: {
+      dentist: function () {
+        this.getAll()
+      }
+    },
 
 
     data: () => ({
+      search: '',
+      dentists: [],
+      dentist: null,
+      invoices: [],
       headers: [
         {
           text: 'datum',
@@ -182,11 +173,8 @@
           text: 'betrag (€)',
           value: 'brutto'
         }
-      ],
-      filterBy: null,
-      search: '',
-      dial: false,
-      invoices: []
+      ]
     })
   }
 </script>
+

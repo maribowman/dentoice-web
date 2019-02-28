@@ -10,7 +10,7 @@ import Dentists from '@/components/Dentists'
 import CreateDentist from '@/components/CreateDentist'
 import Analytics from '@/components/Analytics'
 import Misc from '@/components/Misc'
-import NotFound from '@/components/NotFound'
+import Gerhard from '@/components/Gerhard'
 
 Vue.use(Router);
 
@@ -84,9 +84,15 @@ export default new Router({
       component: Misc
     },
     {
+      path: '/gerhard',
+      name: 'Gerhard',
+      component: Gerhard
+    },
+    {
       path: '*',
-      name: 'NotFound',
-      component: NotFound
+      redirect: {
+        name: "Gerhard"
+      }
     }
   ]
 })

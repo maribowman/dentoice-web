@@ -62,7 +62,6 @@
 </template>
 
 <script>
-  import router from '../router';
   import axios from 'axios';
 
   export default {
@@ -71,11 +70,11 @@
 
     methods: {
       create() {
-        router.push({name: "CreateDentist"});
+        this.$router.push({name: "CreateDentist"});
       },
 
       edit(dentist) {
-        router.push({name: "CreateDentist", params: {dentist: dentist}});
+        this.$router.push({name: "CreateDentist", params: {dentist: dentist}});
       },
 
       getAll() {

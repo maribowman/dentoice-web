@@ -288,7 +288,6 @@
 
 
 <script>
-  import router from '../router'
   import axios from 'axios';
 
   export default {
@@ -441,7 +440,7 @@
           .then(response => {
             console.log(response);
             if (response.status === 201) {
-              router.push({name: "Invoices"});
+              this.$router.push({name: "Invoices"});
             }
           })
           .catch(error => {
@@ -475,7 +474,7 @@
       },
 
       back() {
-        router.go(-1);
+        this.$router.go(-1);
       },
 
       editMaterial(item) {

@@ -2,23 +2,21 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-        <blockquote>
-          &#8220;PAGE NOT FOUND!&#8221;
-        </blockquote>
-        <v-btn @click="navigate()">back</v-btn>
+        <quote>HAHAHA I BIMS 1 GERHARD!</quote>
+        <v-btn icon @click="navigate()">
+          <img src="@/assets/gerhard.jpg" contain height="800">
+        </v-btn>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
-  import router from '../router'
-
   export default {
     name: 'NotFound',
     methods: {
       navigate() {
-        router.go(-1);
+        this.$router.go(-1);
       }
     }
   }
