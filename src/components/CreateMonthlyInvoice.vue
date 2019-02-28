@@ -92,8 +92,6 @@
 </template>
 
 <script>
-  import router from '../router'
-
   export default {
     name: 'CreateMonthlyInvoice',
     data: () => ({
@@ -134,7 +132,7 @@
     methods: {
       create() {
         // make post call to backend
-        router.push({name: "Invoices"});
+        this.$router.push({name: "Invoices"});
       },
 
       back() {
