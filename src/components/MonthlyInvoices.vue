@@ -11,7 +11,6 @@
                           clearable
             ></v-text-field>
           </v-flex>
-          <v-divider></v-divider>
           <v-flex xs12 sm4>
             <v-select v-model="dentist"
                       :items="dentists"
@@ -23,57 +22,11 @@
                       clearable
             ></v-select>
           </v-flex>
-          <v-flex xs12 sm2>
-            <v-menu :close-on-content-click="true"
-                    v-model="fromPicker"
-                    lazy
-                    reactive
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-            >
-              <v-text-field slot="activator"
-                            v-model="fromDate"
-                            prepend-icon="event"
-                            label="von"
-                            readonly
-              ></v-text-field>
-              <v-date-picker v-model="fromDate"
-                             @click="fromDate = false"
-                             first-day-of-week="1"
-                             locale="de-de"
-              ></v-date-picker>
-            </v-menu>
-          </v-flex>
-          <v-flex xs12 sm2>
-            <v-menu :close-on-content-click="true"
-                    v-model="toPicker"
-                    lazy
-                    reactive
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-            >
-              <v-text-field slot="activator"
-                            v-model="toDate"
-                            prepend-icon="event"
-                            label="bis"
-                            readonly
-              ></v-text-field>
-              <v-date-picker v-model="toDate"
-                             @click="toDate = false"
-                             first-day-of-week="1"
-                             locale="de-de"
-              ></v-date-picker>
-            </v-menu>
-          </v-flex>
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
         <v-data-table :headers="headers"
-                      :items="invoices"
+                      :items="monthlies"
                       :search="search"
                       :rows-per-page-items="[10]"
                       item-key="id"
@@ -81,10 +34,9 @@
           <template slot="items" slot-scope="props">
             <tr @click="props.expanded = !props.expanded">
               <td>{{props.item.date}}</td>
-              <td>{{props.item.id }}</td>
-              <td>{{props.item.patient}}</td>
+              <td>{{props.item.description}}</td>
               <td>{{props.item.dentist.firstName + ' ' + props.item.dentist.lastName}}</td>
-              <td>{{props.item.brutto}}</td>
+              <td>{{props.item.total}}</td>
             </tr>
           </template>
           <template slot="expand" slot-scope="props">
@@ -128,7 +80,7 @@
   import axios from 'axios';
 
   export default {
-    name: 'Invoices',
+    name: 'Monthlies',
 
 
     methods: {
@@ -212,8 +164,8 @@
           value: 'date'
         },
         {
-          text: 'patient',
-          value: 'patient'
+          text: 'description',
+          value: 'name'
         },
         {
           text: 'zahnarzt',
@@ -221,7 +173,7 @@
         },
         {
           text: 'betrag (€)',
-          value: 'brutto'
+          value: 'total'
         }
       ]
     })
