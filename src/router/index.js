@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Invoices from '@/components/Invoices'
+import Estimates from '@/components/Estimates'
 import CreateInvoice from '@/components/CreateInvoice'
 import MonthlyInvoices from '@/components/MonthlyInvoices'
 import CreateMonthlyInvoice from '@/components/CreateMonthlyInvoice'
@@ -20,6 +21,11 @@ export default new Router({
       path: '/invoices',
       name: 'Invoices',
       component: Invoices
+    },
+    {
+      path: '/estimates',
+      name: 'Estimates',
+      component: Estimates
     },
     {
       path: '/invoices/create',

@@ -51,9 +51,9 @@
           route: 'Invoices'
         },
         {
-          title: 'rechnungen',
+          title: 'kostenvoranschläge',
           icon: 'layers_clear',
-          route: 'Invoices'
+          route: 'Estimates'
         },
         {
           title: 'monatsrechnungen',

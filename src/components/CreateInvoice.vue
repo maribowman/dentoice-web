@@ -279,7 +279,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click="back()">abbrechen</v-btn>
-          <v-btn color="green" flat @click="create()">speichern</v-btn>
+          <v-btn color="green" flat @click="saveInvoice()">speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-layout>
@@ -294,6 +294,7 @@
     name: 'CreateInvoice',
 
     data: () => ({
+      isUpdateFlow: false,
       dentists: [],
       dentist: null,
       mwst: 7,
@@ -373,6 +374,7 @@
       this.getDentists();
       if (this.$route.params.id) {
         this.loadInvoice(this.$route.params.id);
+        this.isUpdateFlow = true;
       }
     },
 
@@ -415,6 +417,14 @@
           );
       },
 
+      saveInvoice() {
+        if (this.isUpdateFlow) {
+          this.update();
+        } else {
+          this.create();
+        }
+      },
+
       create() {
         axios.post('http://192.168.0.59:9876/v1/invoices/create',
           {
@@ -452,11 +462,47 @@
           });
       },
 
+      update() {
+        axios.patch(`http://localhost:9876/v1/invoices/${this.$route.params.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          },
+          {
+            data: {
+              dentist: this.dentist.id,
+              patient: this.patient,
+              color: this.color,
+              description: this.description,
+              xmlNumber: this.xml,
+              invoiceType: this.invoiceType,
+              insuranceType: this.insuranceType,
+              date: this.date,
+              mwst: this.mwst,
+              efforts: this.efforts,
+              materials: this.materials
+            }
+          })
+          .then(response => {
+            console.log(response);
+            if (response.status === 200) {
+              this.$router.push({name: "Invoices"});
+            }
+          })
+          .catch(error => {
+            let errorString = '';
+            for (const i in error.response.data.errors) {
+              errorString += ('\n -> ' + error.response.data.errors[i].field + ' - ' + error.response.data.errors[i].defaultMessage);
+            }
+            alert(error.response.data.status + ' ' + error.response.data.error + errorString)
+          });
+      },
+
       loadInvoice(id) {
         axios
           .get(`http://192.168.0.59:9876/v1/invoices/${id}`)
           .then(response => {
-              // const data = response.data;
               this.dentist = response.data.dentist;
               this.patient = response.data.patient;
               this.color = response.data.color;
