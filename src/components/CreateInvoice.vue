@@ -463,7 +463,7 @@
       },
 
       update() {
-        axios.patch(`http://localhost:9876/invoices/${this.$route.params.id}`,
+        axios.patch(`http://192.168.0.59:9876/invoices/${this.$route.params.id}`,
           {
             headers: {
               'Content-Type': 'application/json',

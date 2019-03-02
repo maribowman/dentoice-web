@@ -133,7 +133,7 @@
 
     methods: {
       getAll() {
-        let url = `http://localhost:9876/invoices/from/${this.fromDate}/to/${this.toDate}`;
+        let url = `http://192.168.0.59:9876/invoices/from/${this.fromDate}/to/${this.toDate}`;
         if (this.dentist) {
           url += `?dentist=${this.dentist.id}`;
         }

@@ -191,7 +191,7 @@
           return;
         }
         axios
-          .get(`http://localhost:9876/invoices/from/${this.fromDate}/to/${this.toDate}?dentist=${this.dentist.id}`)
+          .get(`http://192.168.0.59:9876/invoices/from/${this.fromDate}/to/${this.toDate}?dentist=${this.dentist.id}`)
           .then(response => (this.invoices = response.data))
           .catch(error => alert.log(error));
       },
@@ -204,7 +204,7 @@
       },
 
       create() {
-        axios.post('http://localhost:9876/monthlies/create',
+        axios.post('http://192.168.0.59:9876/monthlies/create',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -237,7 +237,7 @@
       },
 
       update() {
-        axios.patch(`http://localhost:9876/monthlies/${this.$route.params.id}`,
+        axios.patch(`http://192.168.0.59:9876/monthlies/${this.$route.params.id}`,
           {
             headers: {
               'Content-Type': 'application/json',

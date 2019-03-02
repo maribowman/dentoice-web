@@ -86,7 +86,7 @@
           return;
         }
         axios
-          .get(`http://localhost:9876/monthlies?dentist=${this.dentist.id}`)
+          .get(`http://192.168.0.59:9876/monthlies?dentist=${this.dentist.id}`)
           .then(response => (this.monthlies = response.data))
           .catch(error => alert.log(error));
       },
@@ -101,7 +101,7 @@
 
       getPdf(item) {
         axios({
-          url: `http://localhost:9876/monthlies/${item.id}/pdf`,
+          url: `http://192.168.0.59:9876/monthlies/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -117,7 +117,7 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://localhost:9876/monthlies/${item.id}`)
+          .delete(`http://192.168.0.59:9876/monthlies/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();
