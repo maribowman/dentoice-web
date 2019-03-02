@@ -44,6 +44,9 @@
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
+                <v-btn flat color="green" @click="getXml(props.item)">
+                  <v-icon>code</v-icon>
+                </v-btn>
                 <v-btn flat color="green" @click="getPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
@@ -58,6 +61,18 @@
           </template>
         </v-data-table>
       </v-flex>
+      <v-flex>
+        <v-btn color="green"
+               fab
+               dark
+               fixed
+               bottom
+               right
+               @click="create()"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -71,11 +86,10 @@
 
     methods: {
       getAll() {
-        // let url = `http://192.168.0.59:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`;
-        let url = `http://localhost:9876/v1/invoices/estimates`;
-        // if (this.dentist) {
-        //   url += `?dentist=${this.dentist.id}`;
-        // }
+        let url = `http://192.168.0.59:9876/invoices/estimates`;
+        if (this.dentist) {
+          url += `?dentist=${this.dentist.id}`;
+        }
         axios
           .get(url)
           .then(response => (this.estimates = response.data))
@@ -92,7 +106,7 @@
 
       getPdf(item) {
         axios({
-          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/pdf`,
+          url: `http://192.168.0.59:9876/invoices/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -108,7 +122,7 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://192.168.0.59:9876/v1/invoices/${item.id}`)
+          .delete(`http://192.168.0.59:9876/invoices/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();
@@ -121,7 +135,7 @@
 
       getDentists() {
         axios
-          .get('http://192.168.0.59:9876/v1/dentists')
+          .get('http://192.168.0.59:9876/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       }

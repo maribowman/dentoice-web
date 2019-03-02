@@ -135,7 +135,7 @@
       save() {
         if (this.editedIndex > -1) {
           axios
-            .patch('http://192.168.0.59:9876/v1/materials/' + this.editedItem.position,
+            .patch('http://192.168.0.59:9876/materials/' + this.editedItem.position,
               {
                 headers: {
                   'Content-Type': 'application/json',
@@ -170,7 +170,7 @@
             });
         } else {
           axios
-            .post('http://192.168.0.59:9876/v1/materials/create',
+            .post('http://192.168.0.59:9876/materials/create',
               {
                 headers: {
                   'Content-Type': 'application/json',
@@ -210,7 +210,7 @@
 
       getAll() {
         axios
-          .get('http://192.168.0.59:9876/v1/materials')
+          .get('http://192.168.0.59:9876/materials')
           .then(response => (this.materials = response.data))
           .catch(error => console.log(error));
       },
@@ -218,7 +218,7 @@
       remove(item) {
         confirm('\'' + item.position + ' - ' + item.name + '\' wirklich löschen?') &&
         axios
-          .delete('http://192.168.0.59:9876/v1/materials/' + item.position)
+          .delete('http://192.168.0.59:9876/materials/' + item.position)
           .then(response => {
             if (response.status === 204) {
               this.getAll();

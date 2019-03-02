@@ -38,17 +38,17 @@ export default new Router({
       component: CreateInvoice
     },
     {
-      path: '/invoices/monthly',
+      path: '/monthlies',
       name: 'MonthlyInvoices',
       component: MonthlyInvoices
     },
     {
-      path: '/invoices/monthly/create',
+      path: '/monthlies/create',
       name: 'CreateMonthlyInvoice',
       component: CreateMonthlyInvoice
     },
     {
-      path: '/invoices/monthly/edit/:id',
+      path: '/monthlies/edit/:id',
       name: 'EditMonthlyInvoice',
       component: CreateMonthlyInvoice
     },

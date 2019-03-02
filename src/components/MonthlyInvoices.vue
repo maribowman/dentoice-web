@@ -11,6 +11,7 @@
                           clearable
             ></v-text-field>
           </v-flex>
+          <v-divider></v-divider>
           <v-flex xs12 sm4>
             <v-select v-model="dentist"
                       :items="dentists"
@@ -22,7 +23,52 @@
                       clearable
             ></v-select>
           </v-flex>
-
+          <v-flex xs12 sm2>
+            <v-menu :close-on-content-click="true"
+                    v-model="fromPicker"
+                    lazy
+                    reactive
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+              <v-text-field slot="activator"
+                            v-model="fromDate"
+                            prepend-icon="event"
+                            label="von"
+                            readonly
+              ></v-text-field>
+              <v-date-picker v-model="fromDate"
+                             @click="fromDate = false"
+                             first-day-of-week="1"
+                             locale="de-de"
+              ></v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm2>
+            <v-menu :close-on-content-click="true"
+                    v-model="toPicker"
+                    lazy
+                    reactive
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+              <v-text-field slot="activator"
+                            v-model="toDate"
+                            prepend-icon="event"
+                            label="bis"
+                            readonly
+              ></v-text-field>
+              <v-date-picker v-model="toDate"
+                             @click="toDate = false"
+                             first-day-of-week="1"
+                             locale="de-de"
+              ></v-date-picker>
+            </v-menu>
+          </v-flex>
         </v-toolbar>
       </v-flex>
       <v-flex xs12>
@@ -84,11 +130,15 @@
   export default {
     name: 'Invoices',
 
+
     methods: {
       getAll() {
+        if (!this.dentist) {
+          return;
+        }
         axios
-          .get(`http://192.168.0.59:9876/v1/invoices/from/${this.fromDate}/to/${this.toDate}`)
-          .then(response => (this.invoices = response.data))
+          .get(`http://localhost:9876/monthlies?dentist=${this.dentist.id}`)
+          .then(response => (this.monthlies = response.data))
           .catch(error => alert.log(error));
       },
 
@@ -97,12 +147,12 @@
       },
 
       edit(invoice) {
-        this.$router.push({name: "EditInvoice", params: {id: invoice.id}});
+        this.$router.push({name: "CreateMonthlyInvoice", params: {id: invoice.id}});
       },
 
       getPdf(item) {
         axios({
-          url: `http://192.168.0.59:9876/v1/invoices/${item.id}/pdf`,
+          url: `http://localhost:9876/monthlies/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -118,12 +168,12 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://192.168.0.59:9876/v1/invoices/${item.id}`)
+          .delete(`http://localhost:9876/invoices/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();
             } else {
-              alert(`could not delete ${item.id}.something went wrong!`)
+              alert(`could not delete ${item.id}. something went wrong!`)
             }
           })
           .catch(error => alert.log(error));
@@ -131,16 +181,16 @@
 
       getDentists() {
         axios
-          .get('http://192.168.0.59:9876/v1/dentists')
+          .get('http://192.168.0.59:9876/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       }
     }
     ,
 
-    created() {
-      this.getAll();
+    mounted() {
       this.getDentists();
+      this.getAll();
     },
 
 
@@ -155,15 +205,15 @@
       search: '',
       dentists: [],
       dentist: null,
-      invoices: [],
+      monthlies: [],
       headers: [
         {
           text: 'datum',
           value: 'date'
         },
         {
-          text: 'nummer',
-          value: 'id'
+          text: 'patient',
+          value: 'patient'
         },
         {
           text: 'zahnarzt',
@@ -177,4 +227,3 @@
     })
   }
 </script>
-
