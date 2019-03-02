@@ -43,9 +43,6 @@
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat color="green" @click="getXml(props.item)">
-                  <v-icon>code</v-icon>
-                </v-btn>
                 <v-btn flat color="green" @click="getPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
                 </v-btn>
@@ -80,7 +77,7 @@
   import axios from 'axios';
 
   export default {
-    name: 'Monthlies',
+    name: 'CreateMonthlyInvoices',
 
 
     methods: {
@@ -120,7 +117,7 @@
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://localhost:9876/invoices/${item.id}`)
+          .delete(`http://localhost:9876/monthlies/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();

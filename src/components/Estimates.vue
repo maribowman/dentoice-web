@@ -61,18 +61,6 @@
           </template>
         </v-data-table>
       </v-flex>
-      <v-flex>
-        <v-btn color="green"
-               fab
-               dark
-               fixed
-               bottom
-               right
-               @click="create()"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
-      </v-flex>
     </v-layout>
   </v-container>
 </template>
