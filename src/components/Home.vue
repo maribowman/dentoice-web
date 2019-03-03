@@ -1,34 +1,34 @@
 <template>
   <v-app>
-    <v-navigation-drawer permanent
-                         mini-variant
-                         clipped
-                         stateless
-                         hide-overlay
-                         dark
-                         app
+    <v-navigation-drawer app
+                         class="orange lighten-4"
+                         permanent
+                         width="225"
     >
-      <v-toolbar clipped-left prominent>
-        <v-list>
-          <v-list-tile>
-            <v-list-tile-avatar>
-              <img src="@/assets/dent.png">
-            </v-list-tile-avatar>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-      <v-list two-line>
-        <v-list-tile v-for="item in menu"
-                     v-model="item.active"
-                     :key="item.title"
-                     :prepend-icon="item.icon"
-                     @click="navigate(item.route)"
-        >
-          <v-list-tile-avatar>
-            <v-icon>{{item.icon}}</v-icon>
+      <v-layout class="fill-height"
+                tag="v-list"
+                column
+      >
+        <v-list-tile avatar>
+          <v-list-tile-avatar
+          ><img src="@/assets/dent.png">
           </v-list-tile-avatar>
+          <v-list-tile-title class="title">DENTOICE</v-list-tile-title>
         </v-list-tile>
-      </v-list>
+        <v-divider/>
+        <v-list-tile v-for="item in menu"
+                     :key="item.title"
+                     avatar
+                     class="v-list-item"
+                     :to="item.route"
+                     @click="validateSession(item.title)"
+        >
+          <v-list-tile-action>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title v-text="item.title"/>
+        </v-list-tile>
+      </v-layout>
     </v-navigation-drawer>
     <v-content>
       <router-view></router-view>
@@ -48,58 +48,47 @@
         {
           title: 'rechnungen',
           icon: 'layers',
-          route: 'Invoices'
+          route: '/invoices'
         },
         {
           title: 'kostenvoranschläge',
           icon: 'layers_clear',
-          route: 'Estimates'
+          route: '/estimates'
         },
         {
           title: 'monatsrechnungen',
           icon: 'euro_symbol',
-          route: 'MonthlyInvoices'
+          route: '/monthlies'
         },
         {
           title: 'material',
           icon: 'build',
-          route: 'Materials'
+          route: '/materials'
         },
         {
           title: 'leistungen',
           icon: 'business_center',
-          route: 'Efforts'
+          route: '/efforts'
         },
         {
           title: 'zahnärzte',
           icon: 'group',
-          route: 'Dentists'
+          route: '/dentists'
         },
-        // {
-        //   title: 'auswertungen',
-        //   icon: 'bar_chart',
-        //   route: 'Analytics'
-        // },
-        // {
-        //   title: 'sonstiges',
-        //   icon: 'all_inclusive',
-        //   route: 'Misc'
-        // },
         {
           title: 'logout',
           icon: 'exit_to_app',
-          route: 'Login'
+          route: '/login'
         }
       ]
     }),
 
 
     methods: {
-      navigate(page) {
-        if (page == 'Login') {
+      validateSession(page) {
+        if (page === 'logout') {
           this.$emit("authenticated", false);
         }
-        this.$router.push({name: page});
       }
     }
   }

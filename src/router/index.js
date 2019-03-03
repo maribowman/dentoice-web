@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '@/components/Login'
 import Invoices from '@/components/Invoices'
 import Estimates from '@/components/Estimates'
 import CreateInvoice from '@/components/CreateInvoice'
@@ -17,6 +18,11 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
     {
       path: '/invoices',
       name: 'Invoices',
