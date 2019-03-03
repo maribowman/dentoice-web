@@ -30,6 +30,8 @@
           if (this.checked && this.input.username == this.credentials.username && this.input.password == this.credentials.password) {
             this.$emit("authenticated", true);
             this.$router.push({name: 'Invoices'})
+          } else if (!this.checked) {
+            alert("du darfst kein gerhard sein");
           } else {
             alert("name und/oder passwort falsch");
           }
