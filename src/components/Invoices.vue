@@ -92,7 +92,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat color="green" @click="processXml(props.item)">
-                  <v-icon>code</v-icon>
+                  <v-icon>settings_ethernet</v-icon>
                 </v-btn>
                 <v-btn flat color="green" @click="getPdf(props.item)">
                   <v-icon>picture_as_pdf</v-icon>
