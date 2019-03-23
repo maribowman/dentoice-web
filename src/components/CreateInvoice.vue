@@ -382,14 +382,14 @@
     methods: {
       getDentists() {
         axios
-          .get('http://192.168.0.59:9876/dentists')
+          .get('http://localhost:9876/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       },
 
       getMaterial(position) {
         axios
-          .get(`http://192.168.0.59:9876/materials/${position}`)
+          .get(`http://localhost:9876/materials/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
@@ -404,7 +404,7 @@
 
       getEffort(position) {
         axios
-          .get(`http://192.168.0.59:9876/efforts/${position}`)
+          .get(`http://localhost:9876/efforts/${position}`)
           .then(response => (this.editedItem = response.data))
           .catch(error => {
               if (error.response.status === 400) {
@@ -426,7 +426,7 @@
       },
 
       create() {
-        axios.post('http://192.168.0.59:9876/invoices/create',
+        axios.post('http://localhost:9876/invoices/create',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -463,7 +463,7 @@
       },
 
       update() {
-        axios.patch(`http://192.168.0.59:9876/invoices/${this.$route.params.id}`,
+        axios.patch(`http://localhost:9876/invoices/${this.$route.params.id}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -501,7 +501,7 @@
 
       loadInvoice(id) {
         axios
-          .get(`http://192.168.0.59:9876/invoices/${id}`)
+          .get(`http://localhost:9876/invoices/${id}`)
           .then(response => {
               this.dentist = response.data.dentist;
               this.patient = response.data.patient;

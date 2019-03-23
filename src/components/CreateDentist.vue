@@ -65,7 +65,7 @@
       },
 
       create() {
-        axios.post('http://192.168.0.59:9876/dentists/create',
+        axios.post('http://localhost:9876/dentists/create',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -100,7 +100,7 @@
       },
 
       update() {
-        axios.patch('http://192.168.0.59:9876/dentists/' + this.id,
+        axios.patch('http://localhost:9876/dentists/' + this.id,
           {
             headers: {
               'Content-Type': 'application/json',

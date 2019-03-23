@@ -91,7 +91,7 @@
             <v-card flat>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat color="green" @click="getXml(props.item)">
+                <v-btn flat color="green" @click="processXml(props.item)">
                   <v-icon>code</v-icon>
                 </v-btn>
                 <v-btn flat color="green" @click="getPdf(props.item)">
@@ -133,7 +133,7 @@
 
     methods: {
       getAll() {
-        let url = `http://192.168.0.59:9876/invoices/from/${this.fromDate}/to/${this.toDate}`;
+        let url = `http://localhost:9876/invoices/from/${this.fromDate}/to/${this.toDate}`;
         if (this.dentist) {
           url += `?dentist=${this.dentist.id}`;
         }
@@ -153,7 +153,7 @@
 
       getPdf(item) {
         axios({
-          url: `http://192.168.0.59:9876/invoices/${item.id}/pdf`,
+          url: `http://localhost:9876/invoices/${item.id}/pdf`,
           method: 'GET',
           responseType: 'blob'
         }).then((response) => {
@@ -166,9 +166,15 @@
         });
       },
 
+      processXml(item) {
+        this.getXml(item);
+        this.sendXml(item);
+      },
+
+
       getXml(item) {
         axios({
-          url: `http://192.168.0.59:9876/invoices/${item.id}/xml`,
+          url: `http://localhost:9876/invoices/${item.id}/xml`,
           method: 'GET',
           responseType: 'blob'
         })
@@ -182,10 +188,23 @@
           });
       },
 
+      sendXml(item) {
+        axios({
+          url: `http://localhost:9876/mail/${item.id}/xml`,
+          method: 'GET',
+        })
+          .then(response => {
+            if (response.status !== 200) {
+              alert(`something went wrong! could not send email for invoice ${item.id}. `)
+            }
+          })
+          .catch(error => alert.log(error));
+      },
+
       remove(item) {
         confirm(`rechnung ${item.id} wirklich löschen?`) &&
         axios
-          .delete(`http://192.168.0.59:9876/invoices/${item.id}`)
+          .delete(`http://localhost:9876/invoices/${item.id}`)
           .then(response => {
             if (response.status === 204) {
               this.getAll();
@@ -198,7 +217,7 @@
 
       getDentists() {
         axios
-          .get('http://192.168.0.59:9876/dentists')
+          .get('http://localhost:9876/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       }

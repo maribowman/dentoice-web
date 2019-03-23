@@ -17,8 +17,8 @@
         password: ""
       },
       credentials: {
-        username: "",
-        password: ""
+        username: "edith",
+        password: "j4ckson."
       }
       , checked: ''
     }),

@@ -79,7 +79,7 @@
 
       getAll() {
         axios
-          .get('http://192.168.0.59:9876/dentists')
+          .get('http://localhost:9876/dentists')
           .then(response => (this.dentists = response.data))
           .catch(error => alert.log(error));
       },
@@ -87,7 +87,7 @@
       remove(item) {
         confirm(item.firstName + ' ' + item.lastName + ' wirklich löschen?') &&
         axios
-          .delete('http://192.168.0.59:9876/dentists/' + item.id)
+          .delete('http://localhost:9876/dentists/' + item.id)
           .then(response => {
             if (response.status === 200) {
               this.getAll();

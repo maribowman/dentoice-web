@@ -1,7 +1,8 @@
 <template>
   <div>
-    <Login v-if="!authenticated" @authenticated="setAuthenticated"></Login>
-    <Home v-else @authenticated="setAuthenticated"></Home>
+    <!--<Login v-if="!authenticated" @authenticated="setAuthenticated"></Login>-->
+    <!--<Home v-else @authenticated="setAuthenticated"></Home>-->
+    <Home/>
   </div>
 </template>
 
