@@ -119,23 +119,26 @@
                                 </v-btn>
                               </v-flex>
                             </v-layout>
-                            <v-layout row>
-                              <v-flex xs9>
+                              <v-flex xs12>
                                 <v-text-field v-model="editedItem.name" label="bezeichnung"></v-text-field>
                               </v-flex>
-                              <v-flex>
-                                <v-checkbox v-model="editedItem.isMetal" label="metall"></v-checkbox>
-                              </v-flex>
-                            </v-layout>
-                            <v-flex xs12>
-                              <v-text-field v-model="editedItem.notes" label="kommentar"></v-text-field>
-                            </v-flex>
                             <v-flex xs12>
                               <v-text-field v-model="editedItem.quantity" label="menge"></v-text-field>
                             </v-flex>
                             <v-flex xs12>
                               <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
                             </v-flex>
+                            <v-flex xs12>
+                              <v-text-field v-model="editedItem.notes" label="kommentar"></v-text-field>
+                            </v-flex>
+                            <v-layout row>
+                              <v-flex>
+                                <v-checkbox v-model="editedItem.isMetal" label="metall"></v-checkbox>
+                              </v-flex>
+                              <v-flex>
+                                <v-checkbox v-model="editedItem.isPrivate" label="privat"></v-checkbox>
+                              </v-flex>
+                            </v-layout>
                           </v-layout>
                         </v-container>
                       </v-card-text>
@@ -224,6 +227,9 @@
                             </v-flex>
                             <v-flex xs12>
                               <v-text-field v-model="editedItem.pricePerUnit" label="einzelpreis"></v-text-field>
+                            </v-flex>
+                            <v-flex>
+                              <v-checkbox v-model="editedItem.isPrivate" label="privat"></v-checkbox>
                             </v-flex>
                           </v-layout>
                         </v-container>
